@@ -1,0 +1,18 @@
+goroutine profile: total 2
+1 @ 0x42a7ba 0x42a8ae 0x40464f 0x404365 0x46be86 0x46eefd 0x46bb21 0x46cb95 0x46c1b5 0x401276 0x42a354 0x457751
+#	0x46be85	testing.(*T).Run+0x315		/home/slack/go/src/testing/testing.go:647
+#	0x46eefc	testing.RunTests.func1+0x6c	/home/slack/go/src/testing/testing.go:793
+#	0x46bb20	testing.tRunner+0x80		/home/slack/go/src/testing/testing.go:610
+#	0x46cb94	testing.RunTests+0x2f4		/home/slack/go/src/testing/testing.go:799
+#	0x46c1b4	testing.(*M).Run+0x84		/home/slack/go/src/testing/testing.go:743
+#	0x401275	main.main+0xc5			demo/prof/_test/_testmain.go:56
+#	0x42a353	runtime.main+0x1f3		/home/slack/go/src/runtime/proc.go:183
+
+1 @ 0x4be21f 0x4be020 0x4bacd1 0x470ffc 0x472329 0x46bb21 0x457751
+#	0x4be21e	runtime/pprof.writeRuntimeProfile+0x9e	/home/slack/go/src/runtime/pprof/pprof.go:614
+#	0x4be01f	runtime/pprof.writeGoroutine+0x9f	/home/slack/go/src/runtime/pprof/pprof.go:576
+#	0x4bacd0	runtime/pprof.(*Profile).WriteTo+0x340	/home/slack/go/src/runtime/pprof/pprof.go:298
+#	0x470ffb	demo/prof.SaveProfile+0x27b		/home/slack/go/src/demo/prof/prof.go:150
+#	0x472328	demo/prof.TestRuntimeProf+0x388		/home/slack/go/src/demo/prof/prof_test.go:147
+#	0x46bb20	testing.tRunner+0x80			/home/slack/go/src/testing/testing.go:610
+

@@ -1,0 +1,9 @@
+#include "runtime.h"
+
+void ·Mul(uint64 a, uint64 b, uint64 ret) {
+    ret = a * b;
+    FLUSH(&ret);
+}
+
+/* vim: set tabstop=4 set shiftwidth=4 */
+

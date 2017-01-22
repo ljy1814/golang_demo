@@ -1,0 +1,29 @@
+goroutine 5 [running]:
+runtime/pprof.writeGoroutineStacks(0x590400, 0xc42002e078, 0xc420015060, 0x0)
+	/home/slack/go/src/runtime/pprof/pprof.go:585 +0x79
+runtime/pprof.writeGoroutine(0x590400, 0xc42002e078, 0x2, 0xc4200bfc10, 0xc4200bfc20)
+	/home/slack/go/src/runtime/pprof/pprof.go:574 +0x44
+runtime/pprof.(*Profile).WriteTo(0x59fc80, 0x590400, 0xc42002e078, 0x2, 0x0, 0xc420017290)
+	/home/slack/go/src/runtime/pprof/pprof.go:298 +0x341
+demo/prof.SaveProfile(0x517e3b, 0xd, 0xc420017260, 0xb, 0x51730f, 0x9, 0x2)
+	/home/slack/go/src/demo/prof/prof.go:150 +0x27c
+demo/prof.TestRuntimeProf(0xc420088180)
+	/home/slack/go/src/demo/prof/prof_test.go:147 +0x389
+testing.tRunner(0xc420088180, 0x525eb0)
+	/home/slack/go/src/testing/testing.go:610 +0x81
+created by testing.(*T).Run
+	/home/slack/go/src/testing/testing.go:646 +0x2ec
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc4200880c0, 0x5183db, 0xf, 0x525eb0, 0xc420041d01)
+	/home/slack/go/src/testing/testing.go:647 +0x316
+testing.RunTests.func1(0xc4200880c0)
+	/home/slack/go/src/testing/testing.go:793 +0x6d
+testing.tRunner(0xc4200880c0, 0xc420041e20)
+	/home/slack/go/src/testing/testing.go:610 +0x81
+testing.RunTests(0x525ed0, 0x59fc40, 0x2, 0x2, 0x0)
+	/home/slack/go/src/testing/testing.go:799 +0x2f5
+testing.(*M).Run(0xc420041ee8, 0xc420016648)
+	/home/slack/go/src/testing/testing.go:743 +0x85
+main.main()
+	demo/prof/_test/_testmain.go:56 +0xc6

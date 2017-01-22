@@ -1,0 +1,31 @@
+heap profile: 1: 1048576 [1: 1048576] @ heap/1048576
+1: 1048576 [1: 1048576] @ 0x4be093 0x4bdfc4 0x4bacd1 0x470ffc 0x472329 0x46bb21 0x457751
+#	0x4be092	runtime/pprof.writeGoroutineStacks+0x42	/home/slack/go/src/runtime/pprof/pprof.go:583
+#	0x4bdfc3	runtime/pprof.writeGoroutine+0x43	/home/slack/go/src/runtime/pprof/pprof.go:574
+#	0x4bacd0	runtime/pprof.(*Profile).WriteTo+0x340	/home/slack/go/src/runtime/pprof/pprof.go:298
+#	0x470ffb	demo/prof.SaveProfile+0x27b		/home/slack/go/src/demo/prof/prof.go:150
+#	0x472328	demo/prof.TestRuntimeProf+0x388		/home/slack/go/src/demo/prof/prof_test.go:147
+#	0x46bb20	testing.tRunner+0x80			/home/slack/go/src/testing/testing.go:610
+
+
+# runtime.MemStats
+# Alloc = 1322368
+# TotalAlloc = 1322368
+# Sys = 4262136
+# Lookups = 24
+# Mallocs = 1111
+# Frees = 170
+# HeapAlloc = 1322368
+# HeapSys = 1769472
+# HeapIdle = 155648
+# HeapInuse = 1613824
+# HeapReleased = 0
+# HeapObjects = 941
+# Stack = 327680 / 327680
+# MSpan = 9920 / 16384
+# MCache = 4800 / 16384
+# BuckHashSys = 1442305
+# NextGC = 4194304
+# PauseNs = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+# NumGC = 0
+# DebugGC = false
