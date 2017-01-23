@@ -31,7 +31,7 @@ func NewPageDownloader(client *http.Client) PageDownloader {
 	}
 	return &myPageDownloader{
 		id: id,
-		httpClient: *client
+		httpClient: *client,
 	}
 }
 
@@ -45,10 +45,10 @@ func (dl *myPageDownloader) Id() uint32 {
 	return dl.id
 }
 
-func (dl *myPageDownloader) Download(req base.Request, error) {
+func (dl *myPageDownloader) Download(req base.Request) (*base.Response, error) {
 	httpReq := req.HttpReq()
-	logger.Infoq("Do the request (url=%s)...\n", httpReq.URL)
-	htttpResp, err := dl.httpClient.Do(httpReq)
+	logger.Infof("Do the request (url=%s)...\n", httpReq.URL)
+	httpResp, err := dl.httpClient.Do(httpReq)
 	if err != nil {
 		return nil, err
 	}

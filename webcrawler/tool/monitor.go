@@ -15,14 +15,14 @@ var summaryForMonitoring = "Momitor - Collected information[%d]:\n Goroutine num
 var msgReachMaxIdleCount = "The scheduler has been idle for a period of time (about %s). Now consider what shop it."
 
 //停止调度器的消息模板
-var msgReachMaxIdleCount = "Stop scheduler...%s."
+var msgStopScheduler = "Stop scheduler...%s."
 
 //日志记录函数类型, 0-普通,1-警告,2-错误
-ttype Record func(level byte, content string)
+type Record func(level byte, content string)
 
 //调度器监控函数
 func Monitoring(
-		scheduler sched.Scheduler,
+		scheduler scheduler.Scheduler,
 		intervalNs time.Duration,
 		maxIdleCount uint,
 		autoStop bool,
@@ -43,17 +43,17 @@ func Monitoring(
 	//接收和报告错误
 	reportError(scheduler, record, stopNotifier)
 	//记录摘要信息
-	recordSummary(scheduler, record, stopNotifier)
+	recordSummary(scheduler, detailSummary, record, stopNotifier)
 	//检查计数通道
 	checkCountChan := make(chan uint64, 2)
 	//检查空闲状态
-	checkStatus(scheduler, intervalNs, autoStop, checkCountChan, record, stopNotifier)
+	checkStatus(scheduler, intervalNs, maxIdleCount, autoStop, checkCountChan, record, stopNotifier)
 	return checkCountChan
 }
 
 //检查状态
 
-func checkStatus(scheduler sched.Scheduler, intervalNs time.Duration, maxIdleCount uint, autoStop bool,
+func checkStatus(scheduler scheduler.Scheduler, intervalNs time.Duration, maxIdleCount uint, autoStop bool,
 	checkCountChan chan<- uint64, record Record, stopNotifier chan <- byte) {
 	var checkCount uint64
 	go func() {
@@ -84,7 +84,7 @@ func checkStatus(scheduler sched.Scheduler, intervalNs time.Duration, maxIdleCou
 							if scheduler.Stop() {
 								result = "Success"
 							} else {
-								resuult = "Failing"
+								result = "Failing"
 							}
 							msg = fmt.Sprintf(msgStopScheduler, result)
 							record(0, msg)
@@ -108,12 +108,12 @@ func checkStatus(scheduler sched.Scheduler, intervalNs time.Duration, maxIdleCou
 }
 
 //记录摘要信息
-func recordSummary(scheduler sched.Scheduler, detailSummary bool, record Record, stopNotifier <-chan byte) {
+func recordSummary(scheduler1 scheduler.Scheduler, detailSummary bool, record Record, stopNotifier <-chan byte) {
 	go func() {
 		//等待调度器开启
-		waitForSchedulerStart(scheduler)
+		waitForSchedulerStart(scheduler1)
 		//准备
-		var prevSchedSummary sched.SchedSummary
+		var prevSchedSummary scheduler.SchedSummary
 		var prevNumGoroutine int
 		var recordCount uint64 = 1
 		startTime := time.Now()
@@ -126,7 +126,7 @@ func recordSummary(scheduler sched.Scheduler, detailSummary bool, record Record,
 			}
 			//获取摘要信息的各个组成成分
 			curNumGoroutine := runtime.NumGoroutine()
-			curSchedSummary := scheduler.Summary("  ")
+			currSchedSummary := scheduler1.Summary("  ")
 			//对比前后两份摘要信息的一致性,只有不一致时才会记录
 			if curNumGoroutine != prevNumGoroutine ||!currSchedSummary.Same(prevSchedSummary) {
 				schedSummartStr := func() string {
@@ -149,7 +149,7 @@ func recordSummary(scheduler sched.Scheduler, detailSummary bool, record Record,
 }
 
 //接收和报告错误
-func reportError(scheduler sched.Scheduler,record Record, stopNotifier <-chan byte) {
+func reportError(scheduler scheduler.Scheduler,record Record, stopNotifier <-chan byte) {
 	go func() {
 		//等待调度器开启
 		waitForSchedulerStart(scheduler)
@@ -177,7 +177,7 @@ func reportError(scheduler sched.Scheduler,record Record, stopNotifier <-chan by
 
 
 //等待调度器开启
-func waitForSchedulerStart(scheduler sched.Scheduler) {
+func waitForSchedulerStart(scheduler scheduler.Scheduler) {
 	for !scheduler.Running() {
 		time.Sleep(time.Microsecond)
 	}

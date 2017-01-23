@@ -41,7 +41,7 @@ func (dlpool *myDownloaderPool) Take() (PageDownloader, error) {
 	if err != nil {
 		return nil, err
 	}
-	odl, ok := entity.(PageDownloader)
+	dl, ok := entity.(PageDownloader)
 	if !ok {
 		errMsg := fmt.Sprintf("The type of entity is NOT %s\n", dlpool.etype)
 		panic(errors.New(errMsg))

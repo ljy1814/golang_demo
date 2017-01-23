@@ -7,7 +7,7 @@ import (
 )
 
 //状态字典
-var statusMap = map[byte]string{
+var statusMap = map[requestCacheStatus]string{
 	0: "running",
 	1: "closed",
 }

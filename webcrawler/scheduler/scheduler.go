@@ -75,7 +75,7 @@ func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 		respParsers []analyzer.ParseResponse,
 		itemProcessors []itempipeline.ProcessItem,
 		firstHttpReq *http.Request) (err error) {
-	defer func() {
+	defer func() {   //func1
 		if p := recover(); p != nil {
 			errMsg := fmt.Sprintf("Fatal Scheduler Error: %s\n", p)
 			logger.Fatal(errMsg)
@@ -101,7 +101,7 @@ func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 		return errors.New(errMsg)
 	}
 	sched.dlpool = dlpool
-	analyzerPool, err := generatePageDownloaderPool(sched.poolBaseArgs.AnalyzerPoolSize())
+	analyzerPool, err := generateAnalyzerPool(sched.poolBaseArgs.AnalyzerPoolSize())
 	if err != nil {
 		errMsg := fmt.Sprintf("Occur error when get analyzer pool: %s\n", err)
 		return errors.New(errMsg)
@@ -132,11 +132,11 @@ func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 	if firstHttpReq == nil {
 		return errors.New("The first HTTP request is invalid!")
 	}
-	pd, err := getPrimaryDomain(firstHttpReq, 0)
+	pd, err := getPrimaryDomain(firstHttpReq.Host)
 	if err != nil {
 		return err
 	}
-	sched.primryDomain = pd
+	sched.primaryDomain = pd
 	firstReq := base.NewRequest(firstHttpReq, 0)
 	sched.reqCache.put(firstReq)
 	return nil
