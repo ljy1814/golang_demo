@@ -135,12 +135,12 @@ func record(level byte, content string) {
 func main() {
 	fmt.Println("vim-go")
 	//创建调度器
-	scheduler := scheduler.NewScheduler()
+	scheduler1 := scheduler.NewScheduler()
 	//准备监控参数
 	intervalNs := 10* time.Millisecond
 	maxIdleCount := uint(1000)
 	//开始监控
-	checkCountChan :=tool.Monitoring(scheduler, intervalNs,maxIdleCount, true, false, record)
+	checkCountChan := tool.Monitoring(scheduler1, intervalNs,maxIdleCount, true, false, record)
 	//准备启动参数
 	channelArgs :=base.NewChannelArgs(10, 10, 10, 10)
 	poolBaseArgs := base.NewPoolBaseArgs(3, 3)
@@ -155,7 +155,7 @@ func main() {
 		return
 	}
 	//开启调度器
-	scheduler.Start(channelArgs, poolBaseArgs, crawlDepth, httpClientGenerator, respParsers, itemProcessors, firstHttpReq)
+	scheduler1.Start(channelArgs, poolBaseArgs, crawlDepth, httpClientGenerator, respParsers, itemProcessors, firstHttpReq)
 	//等待监控结束
 	<-checkCountChan
 }

@@ -98,5 +98,6 @@ var summaryTemplate = "status: %s, length: %d, capacity: %d"
 func (rcache *reqCacheBySlice) summary() string {
 	summary := fmt.Sprintf(summaryTemplate, statusMap[rcache.status],
 		rcache.length(), rcache.capacity())
+	fmt.Printf("xxx-----%s\n", summary)
 	return summary
 }

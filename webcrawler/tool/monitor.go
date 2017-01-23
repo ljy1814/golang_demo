@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"time"
 	"demo/webcrawler/scheduler"
+	"demo/display"
 )
 
 //摘要信息模板
@@ -22,13 +23,13 @@ type Record func(level byte, content string)
 
 //调度器监控函数
 func Monitoring(
-		scheduler scheduler.Scheduler,
+		scheduler1 scheduler.Scheduler,
 		intervalNs time.Duration,
 		maxIdleCount uint,
 		autoStop bool,
 		detailSummary bool,
 		record Record) <- chan uint64 {
-	if scheduler == nil {
+	if scheduler1 == nil {
 		panic(errors.New("The scheduler is invalid!"))
 	}
 	//防止过小的参数值对爬取流程的影响
@@ -41,19 +42,19 @@ func Monitoring(
 	//监控停止通知器
 	stopNotifier := make(chan byte, 1)
 	//接收和报告错误
-	reportError(scheduler, record, stopNotifier)
+	reportError(scheduler1, record, stopNotifier)
 	//记录摘要信息
-	recordSummary(scheduler, detailSummary, record, stopNotifier)
+	recordSummary(scheduler1, detailSummary, record, stopNotifier)
 	//检查计数通道
 	checkCountChan := make(chan uint64, 2)
 	//检查空闲状态
-	checkStatus(scheduler, intervalNs, maxIdleCount, autoStop, checkCountChan, record, stopNotifier)
+	checkStatus(scheduler1, intervalNs, maxIdleCount, autoStop, checkCountChan, record, stopNotifier)
 	return checkCountChan
 }
 
 //检查状态
 
-func checkStatus(scheduler scheduler.Scheduler, intervalNs time.Duration, maxIdleCount uint, autoStop bool,
+func checkStatus(scheduler1 scheduler.Scheduler, intervalNs time.Duration, maxIdleCount uint, autoStop bool,
 	checkCountChan chan<- uint64, record Record, stopNotifier chan <- byte) {
 	var checkCount uint64
 	go func() {
@@ -63,12 +64,12 @@ func checkStatus(scheduler scheduler.Scheduler, intervalNs time.Duration, maxIdl
 			checkCountChan <- checkCount
 		}()
 		//等待调度器开启
-		waitForSchedulerStart(scheduler)
+		waitForSchedulerStart(scheduler1)
 		//准备
 		var idleCount uint
 		var firstIdleTime time.Time
 		for {
-			if scheduler.Idle() {
+			if scheduler1.Idle() {
 				//检查调度器的空闲状态
 				idleCount++
 				if idleCount == 1 {
@@ -78,10 +79,10 @@ func checkStatus(scheduler scheduler.Scheduler, intervalNs time.Duration, maxIdl
 					msg := fmt.Sprintf(msgReachMaxIdleCount,time.Since(firstIdleTime).String())
 					record(0, msg)
 					//再次检查调度器的空闲状态,确保它已经可以被停止
-					if scheduler.Idle() {
+					if scheduler1.Idle() {
 						if autoStop {
 							var result string
-							if scheduler.Stop() {
+							if scheduler1.Stop() {
 								result = "Success"
 							} else {
 								result = "Failing"
@@ -126,6 +127,8 @@ func recordSummary(scheduler1 scheduler.Scheduler, detailSummary bool, record Re
 			}
 			//获取摘要信息的各个组成成分
 			curNumGoroutine := runtime.NumGoroutine()
+			fmt.Println(scheduler1)
+			display.Display("scheduler1", scheduler1)
 			currSchedSummary := scheduler1.Summary("  ")
 			//对比前后两份摘要信息的一致性,只有不一致时才会记录
 			if curNumGoroutine != prevNumGoroutine ||!currSchedSummary.Same(prevSchedSummary) {
@@ -149,10 +152,10 @@ func recordSummary(scheduler1 scheduler.Scheduler, detailSummary bool, record Re
 }
 
 //接收和报告错误
-func reportError(scheduler scheduler.Scheduler,record Record, stopNotifier <-chan byte) {
+func reportError(scheduler1 scheduler.Scheduler,record Record, stopNotifier <-chan byte) {
 	go func() {
 		//等待调度器开启
-		waitForSchedulerStart(scheduler)
+		waitForSchedulerStart(scheduler1)
 		for {
 			//查看监控器停止通知
 			select {
@@ -161,7 +164,7 @@ func reportError(scheduler scheduler.Scheduler,record Record, stopNotifier <-cha
 			default:
 
 			}
-			errorChan := scheduler.ErrorChan()
+			errorChan := scheduler1.ErrorChan()
 			if errorChan == nil {
 				return
 			}
