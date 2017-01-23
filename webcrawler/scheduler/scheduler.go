@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"demo/mylog"
-	"demo/display"
+//	"demo/display"
 	"net/http"
 	"strings"
 	"sync/atomic"
@@ -78,7 +78,7 @@ func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 		firstHttpReq *http.Request) (err error) {
 	defer func() {   //func1
 		if p := recover(); p != nil {
-			fmt.Println(p)
+//			fmt.Println(p)
 			errMsg := fmt.Sprintf("Fatal Scheduler Error: %s\n", p)
 			logger.Fatal(errMsg)
 			err = errors.New(errMsg)
@@ -109,9 +109,9 @@ func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 		return errors.New(errMsg)
 	}
 	sched.dlpool = dlpool
-	display.Display("sched3", sched)
+//	display.Display("sched3", sched)
 	analyzerPool, err := generateAnalyzerPool(sched.poolBaseArgs.AnalyzerPoolSize())
-	display.Display("analyzerPool", analyzerPool)
+//	display.Display("analyzerPool", analyzerPool)
 	if err != nil {
 		errMsg := fmt.Sprintf("Occur error when get analyzer pool: %s\n", err)
 		return errors.New(errMsg)
@@ -168,8 +168,8 @@ func (sched *myScheduler) Running() bool {
 }
 
 func (sched *myScheduler) ErrorChan() <-chan error {
-	fmt.Println("-------------------")
-	display.Display("sched", sched)
+//	fmt.Println("-------------------")
+//	display.Display("sched", sched)
 	if sched.chanman.Status() != middleware.CHANNEL_MANAGER_STATUS_INITIALIZED {
 		return nil
 	}
@@ -328,11 +328,11 @@ func (sched *myScheduler) saveReqToCache(req base.Request, code string) bool {
 		logger.Warnln("Ignore the request! It is url is invalid!")
 		return false
 	}
-	if strings.ToLower(reqUrl.Scheme) != "http" {
-		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http!\n", reqUrl.Scheme)
+	if strings.ToLower(reqUrl.Scheme) != "https"  && strings.ToLower(reqUrl.Scheme) == "http" || strings.ToLower(reqUrl.Scheme) != "http"  && strings.ToLower(reqUrl.Scheme) != "https" {
+		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https'!\n", reqUrl.Scheme)
 	}
 	if _, ok := sched.urlMap[reqUrl.String()]; ok {
-		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http'\n", reqUrl.Scheme)
+		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https'\n", reqUrl.Scheme)
 		return false
 	}
 	if pd, _ :=getPrimaryDomain(httpReq.Host); pd != sched.primaryDomain {

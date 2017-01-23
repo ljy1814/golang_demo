@@ -148,7 +148,8 @@ func main() {
 	httpClientGenerator := genHttpClient
 	respParsers := getResponseParsers()
 	itemProcessors := getItemProcessors()
-	startUrl := "http://www.sogou.com"
+//	startUrl := "http://www.sogou.com"
+	startUrl := "https://www.zhihu.com"
 	firstHttpReq, err := http.NewRequest("GET", startUrl, nil)
 	if err != nil {
 		logger.Errorln(err)

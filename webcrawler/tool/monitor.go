@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"time"
 	"demo/webcrawler/scheduler"
-	"demo/display"
+//	"demo/display"
 )
 
 //摘要信息模板
@@ -127,8 +127,8 @@ func recordSummary(scheduler1 scheduler.Scheduler, detailSummary bool, record Re
 			}
 			//获取摘要信息的各个组成成分
 			curNumGoroutine := runtime.NumGoroutine()
-			fmt.Println(scheduler1)
-			display.Display("scheduler1", scheduler1)
+//			fmt.Println(scheduler1)
+//			display.Display("scheduler1", scheduler1)
 			currSchedSummary := scheduler1.Summary("  ")
 			//对比前后两份摘要信息的一致性,只有不一致时才会记录
 			if curNumGoroutine != prevNumGoroutine ||!currSchedSummary.Same(prevSchedSummary) {
