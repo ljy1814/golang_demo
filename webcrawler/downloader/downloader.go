@@ -23,7 +23,7 @@ type PageDownloader interface {
 	Download(req base.Request) (*base.Response, error)	//根据请求下载网页
 }
 
-//创建网页下载器
+//创建网页下载器,主要用网络IO完成功能
 func NewPageDownloader(client *http.Client) PageDownloader {
 	id := genDownloaderId()
 	if client == nil {

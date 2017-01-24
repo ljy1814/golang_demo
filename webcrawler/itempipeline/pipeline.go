@@ -30,6 +30,7 @@ func NewItemPipeline(itemProcessors []ProcessItem) ItemPipeline {
 	if itemProcessors == nil {
 		panic(errors.New(fmt.Sprintf("Invalid item processor list!")))
 	}
+	//新建一个slice存储条目处理管道,防止改变原来的条目处理管道,slice切片底层是数组,其切片对象持有的是数组的引用
 	innerItemProcessors := make([]ProcessItem, 0)
 	for i, ip := range itemProcessors {
 		if ip == nil {
@@ -52,6 +53,7 @@ type myItemPipeline struct {
 
 func (ip *myItemPipeline) Send(item base.Item) []error {
 	atomic.AddUint64(&ip.processingNumber, 1)
+	//Send方法必定会被并发执行,递减processingNumber
 	defer atomic.AddUint64(&ip.processingNumber, uint64(0))
 	atomic.AddUint64(&ip.sent, 1)
 	errs := make([]error, 0)

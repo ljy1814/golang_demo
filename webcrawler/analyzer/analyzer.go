@@ -23,7 +23,7 @@ type Analyzer interface {
 		resp base.Response) ([]base.Data, []error)//根据规则分析响应并返回请求条目
 }
 
-//创建分析器
+//创建分析器,专注于内部计算
 func NewAnalyzer() Analyzer {
 	return &myAnalyzer{id: genAnalyzerId()}
 }
@@ -79,12 +79,16 @@ func appendDataList(dataList []base.Data, data base.Data, respDepth uint32) []ba
 	if data == nil {
 		return dataList
 	}
+	//将类型转换为请求,若是请求类型则转换成功
 	req, ok := data.(*base.Request)
+	//转换不成功,data是个条目,对于条目,不需要任何处理
 	if !ok {
 		return append(dataList, data)
 	}
+	//对请求类型做处理,检验深度是否正确,否则重新生成请求
 	newDepth := respDepth + 1
 	if req.Depth() != newDepth {
+		//此处会复制数据,可能会造成垃圾回收的压力,但是只是在深度不正确的情况下才出现
 		req = base.NewRequest(req.HttpReq(), newDepth)
 	}
 	return append(dataList, req)

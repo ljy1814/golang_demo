@@ -69,6 +69,9 @@ type myScheduler struct {
 	running uint32 //运行标记 0-未运行,1-已运行,2-已停止
 }
 
+//第一类参数用来初始化其它类型的实例,不需要存储
+//第二类参数值用于校验请求的有效性,需要存储
+//第三类指的是可以激活整个爬取流程的参数,不需要存储
 func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 		poolBaseArgs base.PoolBaseArgs,
 		crawlDepth uint32,
@@ -84,6 +87,7 @@ func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 			err = errors.New(errMsg)
 		}
 	}()
+	//atomic不能操作bool类型,需要将其转换成整数,原子操作尽量少用
 	if atomic.LoadUint32(&sched.running) == 1 {
 		return errors.New("The scheduler has been started!\n")
 	}
@@ -224,6 +228,7 @@ func (sched *myScheduler) download(req base.Request) {
 		}
 	}()
 	code := generateCode(DOWNLOADER_CODE, downloader.Id())
+	//下载操作,生成带depth的响应
 	respp, err := downloader.Download(req)
 	if respp != nil {
 		sched.sendResp(*respp, code)
@@ -316,7 +321,7 @@ func (sched *myScheduler) openItemPipeline() {
 	}()
 }
 
-//把请求放到请求缓存
+//把请求放到请求缓存,用于解决网络IO卡顿导致请求通道阻塞的问题,
 func (sched *myScheduler) saveReqToCache(req base.Request, code string) bool {
 	httpReq := req.HttpReq()
 	if httpReq == nil {
@@ -328,7 +333,8 @@ func (sched *myScheduler) saveReqToCache(req base.Request, code string) bool {
 		logger.Warnln("Ignore the request! It is url is invalid!")
 		return false
 	}
-	if strings.ToLower(reqUrl.Scheme) != "https"  && strings.ToLower(reqUrl.Scheme) == "http" || strings.ToLower(reqUrl.Scheme) != "http"  && strings.ToLower(reqUrl.Scheme) != "https" {
+//	if strings.ToLower(reqUrl.Scheme) != "https"  && strings.ToLower(reqUrl.Scheme) == "http" || strings.ToLower(reqUrl.Scheme) != "http"  && strings.ToLower(reqUrl.Scheme) != "https" {
+	if strings.ToLower(reqUrl.Scheme) == "https"  || strings.ToLower(reqUrl.Scheme) == "http" {
 		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https'!\n", reqUrl.Scheme)
 	}
 	if _, ok := sched.urlMap[reqUrl.String()]; ok {
