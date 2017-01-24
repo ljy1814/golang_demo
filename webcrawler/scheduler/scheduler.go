@@ -14,6 +14,7 @@ import (
 	"demo/webcrawler/downloader"
 	"demo/webcrawler/itempipeline"
 	"demo/webcrawler/middleware"
+//	"demo.old/display"
 )
 
 //组件唯一编号
@@ -338,8 +339,9 @@ func (sched *myScheduler) saveReqToCache(req base.Request, code string) bool {
 	if !strings.Contains(strings.ToLower(reqUrl.Scheme), "http") {
 		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https'!\n", reqUrl.Scheme)
 	}
+//	display.Display("sched", sched)
 	if _, ok := sched.urlMap[reqUrl.String()]; ok {
-		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https'\n", reqUrl.Scheme)
+		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https', %s\n", reqUrl.Scheme, reqUrl.String())
 		return false
 	}
 	if pd, _ :=getPrimaryDomain(httpReq.Host); pd != sched.primaryDomain {
