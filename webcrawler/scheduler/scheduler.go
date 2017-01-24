@@ -334,7 +334,7 @@ func (sched *myScheduler) saveReqToCache(req base.Request, code string) bool {
 		return false
 	}
 //	if strings.ToLower(reqUrl.Scheme) != "https"  && strings.ToLower(reqUrl.Scheme) == "http" || strings.ToLower(reqUrl.Scheme) != "http"  && strings.ToLower(reqUrl.Scheme) != "https" {
-	if strings.ToLower(reqUrl.Scheme) == "https"  || strings.ToLower(reqUrl.Scheme) == "http" {
+	if !(strings.ToLower(reqUrl.Scheme) == "https"  || strings.ToLower(reqUrl.Scheme) == "http") {
 		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https'!\n", reqUrl.Scheme)
 	}
 	if _, ok := sched.urlMap[reqUrl.String()]; ok {
