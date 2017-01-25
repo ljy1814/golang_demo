@@ -1,20 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"errors"
-	"github.com/PuerkitoBio/goquery"
-	"io"
 	"demo/mylog"
-	"net/http"
-	"net/url"
-	"strings"
-	"time"
 	"demo/webcrawler/analyzer"
 	"demo/webcrawler/base"
 	"demo/webcrawler/itempipeline"
 	"demo/webcrawler/scheduler"
 	"demo/webcrawler/tool"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"strings"
+	"time"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 var logger mylog.Logger = mylog.NewSimpleLogger()
@@ -26,7 +27,12 @@ func processItem(item base.Item) (result base.Item, err error) {
 	}
 	//生成结果
 	result = make(map[string]interface{})
-	for k, v := range item{ result[k] = v }
+	for k, v := range item {
+		result[k] = v
+	}
+	//	fmt.Println("-----------------------")
+	//	fmt.Println(result)
+	//	fmt.Println("-----------------------")
 	if _, ok := result["number"]; !ok {
 		result["number"] = len(result)
 	}
@@ -34,12 +40,11 @@ func processItem(item base.Item) (result base.Item, err error) {
 	return result, nil
 }
 
-
 //响应解析函数
 func parseForATag(httpResp *http.Response, respDepth uint32) ([]base.Data, []error) {
 	//TODO 支持更多的HTTP响应状态
 	if httpResp.StatusCode != 200 {
-		err :=errors.New(fmt.Sprintf("Unsupported status code %d. (httpResponse=%v)", httpResp))
+		err := errors.New(fmt.Sprintf("Unsupported status code %d. (httpResponse=%v)", httpResp))
 		return nil, []error{err}
 	}
 	var reqUrl *url.URL = httpResp.Request.URL
@@ -50,7 +55,7 @@ func parseForATag(httpResp *http.Response, respDepth uint32) ([]base.Data, []err
 		}
 	}()
 	dataList := make([]base.Data, 0)
-	errs :=make([]error, 0)
+	errs := make([]error, 0)
 	doc, err := goquery.NewDocumentFromReader(httpRespBody)
 	if err != nil {
 		errs = append(errs, err)
@@ -79,16 +84,16 @@ func parseForATag(httpResp *http.Response, respDepth uint32) ([]base.Data, []err
 			if err != nil {
 				errs = append(errs, err)
 			} else {
-				req :=base.NewRequest(httpReq, respDepth)
+				req := base.NewRequest(httpReq, respDepth)
 				dataList = append(dataList, req)
 			}
 		}
 		text := strings.TrimSpace(sel.Text())
 		if text != "" {
-			imap :=make(map[string]interface{})
+			imap := make(map[string]interface{})
 			imap["parent_url"] = reqUrl
 			imap["a.text"] = text
-			item :=base.Item(imap)
+			item := base.Item(imap)
 			dataList = append(dataList, &item)
 			imap["a.index"] = index
 		}
@@ -137,18 +142,18 @@ func main() {
 	//创建调度器
 	scheduler1 := scheduler.NewScheduler()
 	//准备监控参数
-	intervalNs := 10* time.Millisecond
+	intervalNs := 10 * time.Millisecond
 	maxIdleCount := uint(1000)
 	//开始监控
-	checkCountChan := tool.Monitoring(scheduler1, intervalNs,maxIdleCount, true, false, record)
+	checkCountChan := tool.Monitoring(scheduler1, intervalNs, maxIdleCount, true, false, record)
 	//准备启动参数
-	channelArgs :=base.NewChannelArgs(10, 10, 10, 10)
+	channelArgs := base.NewChannelArgs(10, 10, 10, 10)
 	poolBaseArgs := base.NewPoolBaseArgs(3, 3)
 	crawlDepth := uint32(1)
 	httpClientGenerator := genHttpClient
 	respParsers := getResponseParsers()
 	itemProcessors := getItemProcessors()
-//	startUrl := "http://www.sogou.com"
+	//	startUrl := "http://www.sogou.com"
 	startUrl := "https://www.zhihu.com"
 	firstHttpReq, err := http.NewRequest("GET", startUrl, nil)
 	if err != nil {

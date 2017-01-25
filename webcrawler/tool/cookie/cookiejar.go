@@ -1,7 +1,7 @@
 package cookie
 
 import (
-	"code.google.com/p/go.net/publicsuffix"
+	"golang.org/x/net/publicsuffix"
 	"net/http"
 	"net/http/cookiejar"
 )
@@ -9,12 +9,12 @@ import (
 //创建http.CookieJar类型的值
 func NewCookieJar() http.CookieJar {
 	options := &cookiejar.Options{PublicSuffixList: &myPublicSuffixList{}}
-	cj, _ cookiejar.New(options)
+	cj, _ := cookiejar.New(options)
 	return cj
 }
 
 //cookiejar.PublicSuffixList接口的实现
-typemyPublicSuffixList struct{}
+type myPublicSuffixList struct{}
 
 func (psl *myPublicSuffixList) PublicSuffix(domain string) string {
 	suffix, _ := publicsuffix.PublicSuffix(domain)

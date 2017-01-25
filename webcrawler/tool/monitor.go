@@ -1,12 +1,12 @@
 package tool
 
 import (
+	"demo/webcrawler/scheduler"
 	"errors"
 	"fmt"
 	"runtime"
 	"time"
-	"demo/webcrawler/scheduler"
-//	"demo/display"
+	//	"demo/display"
 )
 
 //摘要信息模板
@@ -23,12 +23,12 @@ type Record func(level byte, content string)
 
 //调度器监控函数
 func Monitoring(
-		scheduler1 scheduler.Scheduler,
-		intervalNs time.Duration,
-		maxIdleCount uint,
-		autoStop bool,
-		detailSummary bool,
-		record Record) <- chan uint64 {
+	scheduler1 scheduler.Scheduler,
+	intervalNs time.Duration,
+	maxIdleCount uint,
+	autoStop bool,
+	detailSummary bool,
+	record Record) <-chan uint64 {
 	if scheduler1 == nil {
 		panic(errors.New("The scheduler is invalid!"))
 	}
@@ -55,10 +55,10 @@ func Monitoring(
 //检查状态
 
 func checkStatus(scheduler1 scheduler.Scheduler, intervalNs time.Duration, maxIdleCount uint, autoStop bool,
-	checkCountChan chan<- uint64, record Record, stopNotifier chan <- byte) {
+	checkCountChan chan<- uint64, record Record, stopNotifier chan<- byte) {
 	var checkCount uint64
 	go func() {
-		defer  func() {
+		defer func() {
 			stopNotifier <- 1
 			stopNotifier <- 2
 			checkCountChan <- checkCount
@@ -76,10 +76,11 @@ func checkStatus(scheduler1 scheduler.Scheduler, intervalNs time.Duration, maxId
 					firstIdleTime = time.Now()
 				}
 				if idleCount >= maxIdleCount {
-					msg := fmt.Sprintf(msgReachMaxIdleCount,time.Since(firstIdleTime).String())
+					msg := fmt.Sprintf(msgReachMaxIdleCount, time.Since(firstIdleTime).String())
 					record(0, msg)
 					//再次检查调度器的空闲状态,确保它已经可以被停止
 					if scheduler1.Idle() {
+						//自动停止
 						if autoStop {
 							var result string
 							if scheduler1.Stop() {
@@ -92,6 +93,7 @@ func checkStatus(scheduler1 scheduler.Scheduler, intervalNs time.Duration, maxId
 						}
 						break
 					} else {
+						//不能自动停止
 						if idleCount > 0 {
 							idleCount = 0
 						}
@@ -127,11 +129,11 @@ func recordSummary(scheduler1 scheduler.Scheduler, detailSummary bool, record Re
 			}
 			//获取摘要信息的各个组成成分
 			curNumGoroutine := runtime.NumGoroutine()
-//			fmt.Println(scheduler1)
-//			display.Display("scheduler1", scheduler1)
+			//			fmt.Println(scheduler1)
+			//			display.Display("scheduler1", scheduler1)
 			currSchedSummary := scheduler1.Summary("  ")
 			//对比前后两份摘要信息的一致性,只有不一致时才会记录
-			if curNumGoroutine != prevNumGoroutine ||!currSchedSummary.Same(prevSchedSummary) {
+			if curNumGoroutine != prevNumGoroutine || !currSchedSummary.Same(prevSchedSummary) {
 				schedSummartStr := func() string {
 					if detailSummary {
 						return currSchedSummary.Detail()
@@ -140,7 +142,7 @@ func recordSummary(scheduler1 scheduler.Scheduler, detailSummary bool, record Re
 					}
 				}()
 				//记录摘要信息
-				info := fmt.Sprintf(summaryForMonitoring, recordCount, curNumGoroutine,schedSummartStr, time.Since(startTime).String())
+				info := fmt.Sprintf(summaryForMonitoring, recordCount, curNumGoroutine, schedSummartStr, time.Since(startTime).String())
 				record(0, info)
 				prevNumGoroutine = curNumGoroutine
 				prevSchedSummary = currSchedSummary
@@ -152,7 +154,7 @@ func recordSummary(scheduler1 scheduler.Scheduler, detailSummary bool, record Re
 }
 
 //接收和报告错误
-func reportError(scheduler1 scheduler.Scheduler,record Record, stopNotifier <-chan byte) {
+func reportError(scheduler1 scheduler.Scheduler, record Record, stopNotifier <-chan byte) {
 	go func() {
 		//等待调度器开启
 		waitForSchedulerStart(scheduler1)
@@ -170,14 +172,13 @@ func reportError(scheduler1 scheduler.Scheduler,record Record, stopNotifier <-ch
 			}
 			err := <-errorChan
 			if err != nil {
-				errMsg :=fmt.Sprintf("Error (received from error channel): %s", err)
+				errMsg := fmt.Sprintf("Error (received from error channel): %s", err)
 				record(2, errMsg)
 			}
 			time.Sleep(time.Microsecond)
 		}
 	}()
 }
-
 
 //等待调度器开启
 func waitForSchedulerStart(scheduler scheduler.Scheduler) {

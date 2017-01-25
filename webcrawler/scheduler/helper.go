@@ -48,7 +48,7 @@ func generateCode(prefix string, id uint32) string {
 	return fmt.Sprintf("%s-%d", prefix, id)
 }
 
-//解析组件实力代号
+//解析组件实例代号
 func parseCode(code string) []string {
 	result := make([]string, 2)
 	var codePrefix string

@@ -1,40 +1,42 @@
 package scheduler
 
 import (
+	"demo/mylog"
 	"errors"
 	"fmt"
-	"demo/mylog"
-//	"demo/display"
-	"net/http"
-	"strings"
-	"sync/atomic"
-	"time"
+	//	"demo/display"
 	"demo/webcrawler/analyzer"
 	"demo/webcrawler/base"
 	"demo/webcrawler/downloader"
 	"demo/webcrawler/itempipeline"
 	"demo/webcrawler/middleware"
-//	"demo.old/display"
+	"net/http"
+	"strings"
+	"sync/atomic"
+	"time"
+	//	"demo.old/display"
 )
 
 //组件唯一编号
 const (
-	DOWNLOADER_CODE = "downloader"
-	ANALYZER_CODE = "analyzer"
+	DOWNLOADER_CODE   = "downloader"
+	ANALYZER_CODE     = "analyzer"
 	ITEMPIPELINE_CODE = "item_pipeline"
-	SCHEDULER_CODE = "scheduler"
+	SCHEDULER_CODE    = "scheduler"
 )
 
 var logger mylog.Logger = base.NewLogger()
+
 //生成HTTP客户端的函数类型
 type GenHttpClient func() *http.Client
+
 //调度器接口类型
 type Scheduler interface {
 	//开启调度器
 	Start(
 		channelArgs base.ChannelArgs, //通道参数
 		poolBaseArgs base.PoolBaseArgs, //池基本参数容器
-		crawlDepth uint32,	//需要爬取的网页的最大深度值,深度大于此值的网页会被忽略
+		crawlDepth uint32, //需要爬取的网页的最大深度值,深度大于此值的网页会被忽略
 		httpClientGeneratoor GenHttpClient, //生成HTTP客户端的函数
 		respParsers []analyzer.ParseResponse, //分析器所需的被用来解析HTTP响应的函数序列
 		itemProcessors []itempipeline.ProcessItem, //需要被置入条目处理器管道中的条目处理器的序列
@@ -46,8 +48,8 @@ type Scheduler interface {
 	Running() bool
 	//获得通道错误,调度器以及各个处理器运行模块运行过程中出现的所有错误都会被发送到该通道
 	ErrorChan() <-chan error
-	Idle() bool //判断所有处理模块是否处于空闲状态
-	Summary(prefix string) SchedSummary //摘要信息 
+	Idle() bool                         //判断所有处理模块是否处于空闲状态
+	Summary(prefix string) SchedSummary //摘要信息
 }
 
 //创建调度器
@@ -56,33 +58,33 @@ func NewScheduler() Scheduler {
 }
 
 type myScheduler struct {
-	channelArgs base.ChannelArgs //通道参数的容器
-	poolBaseArgs base.PoolBaseArgs //池基本参数通道
-	crawlDepth uint32 //爬取最大深度
-	primaryDomain string //主域名
-	chanman middleware.ChannelManager //通道管理器
-	stopSign middleware.StopSign //停止信号
-	dlpool downloader.PageDownloaderPool //网页下载器池
-	analyzerPool analyzer.AnalyzerPool //分析器池
-	itemPipeline itempipeline.ItemPipeline //条目处理器通道
-	reqCache requestCache //请求缓存
-	urlMap map[string]bool  //已请求的URL字典
-	running uint32 //运行标记 0-未运行,1-已运行,2-已停止
+	channelArgs   base.ChannelArgs              //通道参数的容器
+	poolBaseArgs  base.PoolBaseArgs             //池基本参数通道
+	crawlDepth    uint32                        //爬取最大深度
+	primaryDomain string                        //主域名
+	chanman       middleware.ChannelManager     //通道管理器
+	stopSign      middleware.StopSign           //停止信号
+	dlpool        downloader.PageDownloaderPool //网页下载器池
+	analyzerPool  analyzer.AnalyzerPool         //分析器池
+	itemPipeline  itempipeline.ItemPipeline     //条目处理器通道
+	reqCache      requestCache                  //请求缓存
+	urlMap        map[string]bool               //已请求的URL字典
+	running       uint32                        //运行标记 0-未运行,1-已运行,2-已停止
 }
 
 //第一类参数用来初始化其它类型的实例,不需要存储
 //第二类参数值用于校验请求的有效性,需要存储
 //第三类指的是可以激活整个爬取流程的参数,不需要存储
 func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
-		poolBaseArgs base.PoolBaseArgs,
-		crawlDepth uint32,
-		httpClientGenerator GenHttpClient,
-		respParsers []analyzer.ParseResponse,
-		itemProcessors []itempipeline.ProcessItem,
-		firstHttpReq *http.Request) (err error) {
-	defer func() {   //func1
+	poolBaseArgs base.PoolBaseArgs,
+	crawlDepth uint32,
+	httpClientGenerator GenHttpClient,
+	respParsers []analyzer.ParseResponse,
+	itemProcessors []itempipeline.ProcessItem,
+	firstHttpReq *http.Request) (err error) {
+	defer func() { //func1
 		if p := recover(); p != nil {
-//			fmt.Println(p)
+			//			fmt.Println(p)
 			errMsg := fmt.Sprintf("Fatal Scheduler Error: %s\n", p)
 			logger.Fatal(errMsg)
 			err = errors.New(errMsg)
@@ -100,10 +102,10 @@ func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 	if err := poolBaseArgs.Check(); err != nil {
 		return nil
 	}
-//	display.Display("sched1", sched)
+	//	display.Display("sched1", sched)
 	sched.poolBaseArgs = poolBaseArgs
 	sched.crawlDepth = crawlDepth
-//	display.Display("sched2", sched)
+	//	display.Display("sched2", sched)
 	sched.chanman = generateChannelManager(sched.channelArgs)
 	if httpClientGenerator == nil {
 		return errors.New("The HTTP Client generator list is invalid!")
@@ -114,9 +116,9 @@ func (sched *myScheduler) Start(channelArgs base.ChannelArgs,
 		return errors.New(errMsg)
 	}
 	sched.dlpool = dlpool
-//	display.Display("sched3", sched)
+	//	display.Display("sched3", sched)
 	analyzerPool, err := generateAnalyzerPool(sched.poolBaseArgs.AnalyzerPoolSize())
-//	display.Display("analyzerPool", analyzerPool)
+	//	display.Display("analyzerPool", analyzerPool)
 	if err != nil {
 		errMsg := fmt.Sprintf("Occur error when get analyzer pool: %s\n", err)
 		return errors.New(errMsg)
@@ -173,8 +175,8 @@ func (sched *myScheduler) Running() bool {
 }
 
 func (sched *myScheduler) ErrorChan() <-chan error {
-//	fmt.Println("-------------------")
-//	display.Display("sched", sched)
+	//	fmt.Println("-------------------")
+	//	display.Display("sched", sched)
 	if sched.chanman.Status() != middleware.CHANNEL_MANAGER_STATUS_INITIALIZED {
 		return nil
 	}
@@ -281,13 +283,13 @@ func (sched *myScheduler) analyze(respParsers []analyzer.ParseResponse, resp bas
 				continue
 			}
 			switch d := data.(type) {
-				case *base.Request:
-					sched.saveReqToCache(*d, code)
-				case *base.Item:
-					sched.sendItem(*d, code)
-				default:
-					errMsg := fmt.Sprintf("Unsupported data type '%T'! (value=%v)\n", d, d)
-					sched.sendError(errors.New(errMsg), code)
+			case *base.Request:
+				sched.saveReqToCache(*d, code)
+			case *base.Item:
+				sched.sendItem(*d, code)
+			default:
+				errMsg := fmt.Sprintf("Unsupported data type '%T'! (value=%v)\n", d, d)
+				sched.sendError(errors.New(errMsg), code)
 			}
 		}
 	}
@@ -306,7 +308,7 @@ func (sched *myScheduler) openItemPipeline() {
 		for item := range sched.getItemChan() {
 			go func(item base.Item) {
 				defer func() {
-					if p := recover();p != nil {
+					if p := recover(); p != nil {
 						errMsg := fmt.Sprintf("Fatal Item Processing Error: %s\n", p)
 						logger.Fatal(errMsg)
 					}
@@ -334,17 +336,17 @@ func (sched *myScheduler) saveReqToCache(req base.Request, code string) bool {
 		logger.Warnln("Ignore the request! It is url is invalid!")
 		return false
 	}
-//	if strings.ToLower(reqUrl.Scheme) != "https"  && strings.ToLower(reqUrl.Scheme) == "http" || strings.ToLower(reqUrl.Scheme) != "http"  && strings.ToLower(reqUrl.Scheme) != "https" {
-//	if !(strings.ToLower(reqUrl.Scheme) == "https"  || strings.ToLower(reqUrl.Scheme) == "http") {
+	//	if strings.ToLower(reqUrl.Scheme) != "https"  && strings.ToLower(reqUrl.Scheme) == "http" || strings.ToLower(reqUrl.Scheme) != "http"  && strings.ToLower(reqUrl.Scheme) != "https" {
+	//	if !(strings.ToLower(reqUrl.Scheme) == "https"  || strings.ToLower(reqUrl.Scheme) == "http") {
 	if !strings.Contains(strings.ToLower(reqUrl.Scheme), "http") {
 		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https'!\n", reqUrl.Scheme)
 	}
-//	display.Display("sched", sched)
+	//	display.Display("sched", sched)
 	if _, ok := sched.urlMap[reqUrl.String()]; ok {
 		logger.Warnf("Ignore the request! It is url schema %q, but should be 'http' or 'https', %s\n", reqUrl.Scheme, reqUrl.String())
 		return false
 	}
-	if pd, _ :=getPrimaryDomain(httpReq.Host); pd != sched.primaryDomain {
+	if pd, _ := getPrimaryDomain(httpReq.Host); pd != sched.primaryDomain {
 		logger.Warnf("Ignore the request! It 's host %q not in primary domain %q. (requestUrl=%s)\n", httpReq.Host, sched.primaryDomain, reqUrl)
 		return false
 	}
@@ -378,19 +380,19 @@ func (sched *myScheduler) sendItem(item base.Item, code string) bool {
 }
 
 //发送错误
-func (sched *myScheduler) sendError(err error, code string)  bool {
+func (sched *myScheduler) sendError(err error, code string) bool {
 	if err != nil {
 		return false
 	}
 	codePrefix := parseCode(code)[0]
 	var errorType base.ErrorType
 	switch codePrefix {
-		case DOWNLOADER_CODE:
-			errorType = base.DOWNLOADER_ERROR
-		case ANALYZER_CODE:
-			errorType =base.ANALYZER_ERROR
-		case ITEMPIPELINE_CODE:
-			errorType = base.ITEM_PROCESSER_ERROR
+	case DOWNLOADER_CODE:
+		errorType = base.DOWNLOADER_ERROR
+	case ANALYZER_CODE:
+		errorType = base.ANALYZER_ERROR
+	case ITEMPIPELINE_CODE:
+		errorType = base.ITEM_PROCESSER_ERROR
 	}
 	cError := base.NewCrawlerError(errorType, err.Error())
 	if sched.stopSign.Signed() {
@@ -402,8 +404,9 @@ func (sched *myScheduler) sendError(err error, code string)  bool {
 	}()
 	return true
 }
- //调度,适当的搬运请求缓存中的请求到请求通道
- func (sched *myScheduler) schedule(interval time.Duration) {
+
+//调度,适当的搬运请求缓存中的请求到请求通道
+func (sched *myScheduler) schedule(interval time.Duration) {
 	go func() {
 		for {
 			if sched.stopSign.Signed() {
@@ -414,7 +417,7 @@ func (sched *myScheduler) sendError(err error, code string)  bool {
 			var temp *base.Request
 			for remainder > 0 {
 				temp = sched.reqCache.get()
-				if temp ==nil {
+				if temp == nil {
 					break
 				}
 				if sched.stopSign.Signed() {
@@ -427,40 +430,40 @@ func (sched *myScheduler) sendError(err error, code string)  bool {
 			time.Sleep(interval)
 		}
 	}()
- }
+}
 
- //获取通道管理器持有的请求通道
- func (sched *myScheduler) getReqChan() chan base.Request {
+//获取通道管理器持有的请求通道
+func (sched *myScheduler) getReqChan() chan base.Request {
 	reqChan, err := sched.chanman.ReqChan()
-	 if err != nil {
+	if err != nil {
 		panic(err)
 	}
 	return reqChan
- }
+}
 
- //获取响应通道
- func (sched *myScheduler) getRespChan() chan base.Response {
+//获取响应通道
+func (sched *myScheduler) getRespChan() chan base.Response {
 	respChan, err := sched.chanman.RespChan()
 	if err != nil {
 		panic(err)
 	}
 	return respChan
- }
+}
 
- //获取通道管理器所持有的条目
- func (sched *myScheduler) getItemChan() chan base.Item {
-	itemChan, err :=sched.chanman.ItemChan()
+//获取通道管理器所持有的条目
+func (sched *myScheduler) getItemChan() chan base.Item {
+	itemChan, err := sched.chanman.ItemChan()
 	if err != nil {
 		panic(err)
 	}
 	return itemChan
- }
+}
 
- //获取通道管理器所持有的错误通道
- func (sched *myScheduler) getErrorChan() chan error {
+//获取通道管理器所持有的错误通道
+func (sched *myScheduler) getErrorChan() chan error {
 	errorChan, err := sched.chanman.ErrorChan()
 	if err != nil {
 		panic(err)
 	}
 	return errorChan
- }
+}
