@@ -1,14 +1,18 @@
 package groupcache
 
 import (
+	"demo/display"
 	"demo/groupcache/groupcachepb"
 	"demo/groupcache/lru"
 	"demo/groupcache/singleflight"
+	"demo/mylog"
 	"errors"
 	"math/rand"
+	"os"
 	"strconv"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 //通过key获取数据
@@ -27,6 +31,7 @@ var (
 	groups             = make(map[string]*Group)
 	initPeerServerOnce sync.Once
 	initPeerServer     func()
+	logger             = mylog.NewFileLogger()
 )
 
 func GetGroup(name string) *Group {
@@ -62,7 +67,18 @@ func newGroup(name string, cacheBytes int64, getter Getter, peers PeerPicker) *G
 		fn(g)
 	}
 	groups[name] = g
+	//	logger.Infoln(groups)
+	GDisplay("groups", groups)
 	return g
+}
+
+func GDisplay(name string, value interface{}) {
+	fdisplay, err := os.OpenFile("display-"+time.Now().Format("2006-01-02")+".log", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
+	if err != nil {
+		panic("open display filoe failed")
+	}
+	defer fdisplay.Close()
+	display.Fdisplay(fdisplay, name, value)
 }
 
 var newGroupHook func(*Group)
@@ -133,6 +149,8 @@ func (g *Group) initPeers() {
 }
 
 func (g *Group) Get(ctx Context, key string, dest Sink) error {
+	logger.Infof("enter into %v.Get method", g.name)
+	defer logger.Infof("leave from %v.Get method", g.name)
 	g.peersOnce.Do(g.initPeers)
 	//get计数加1
 	g.Stats.Gets.Add(1)
@@ -162,6 +180,8 @@ func (g *Group) Get(ctx Context, key string, dest Sink) error {
 
 //加载数据,本地加载或者从网络上获取
 func (g *Group) load(ctx Context, key string, dest Sink) (value ByteView, destPopulated bool, err error) {
+	logger.Infof("enter into %v.load method", g.name)
+	defer logger.Infof("leave from %v.load method", g.name)
 	g.Stats.Loads.Add(1)
 	viewi, err := g.loadGroup.Do(key, func() (interface{}, error) {
 		//查询cache,防止两个goroutine同时访问出现差错,singleflight只会调用那个函数
@@ -213,6 +233,8 @@ func (g *Group) load(ctx Context, key string, dest Sink) (value ByteView, destPo
 }
 
 func (g *Group) getLocally(ctx Context, key string, dest Sink) (ByteView, error) {
+	logger.Infof("enter into %v.getLocally method", g.name)
+	defer logger.Infof("leave from %v.getLocally method", g.name)
 	err := g.getter.Get(ctx, key, dest)
 	if err != nil {
 		return ByteView{}, err
@@ -221,6 +243,8 @@ func (g *Group) getLocally(ctx Context, key string, dest Sink) (ByteView, error)
 }
 
 func (g *Group) getFromPeer(ctx Context, peer ProtoGetter, key string) (ByteView, error) {
+	logger.Infof("enter into %v.getFromPeer method", g.name)
+	defer logger.Infof("leave from %v.getFromPeer method", g.name)
 	req := &groupcachepb.GetRequest{
 		Group: &g.name,
 		Key:   &key,
@@ -240,6 +264,8 @@ func (g *Group) getFromPeer(ctx Context, peer ProtoGetter, key string) (ByteView
 }
 
 func (g *Group) lookupCache(key string) (value ByteView, ok bool) {
+	logger.Infof("enter into %v.lookupCache method", g.name)
+	defer logger.Infof("leave from %v.lookupCache method", g.name)
 	if g.cacheBytes <= 0 {
 		return
 	}
@@ -253,6 +279,8 @@ func (g *Group) lookupCache(key string) (value ByteView, ok bool) {
 }
 
 func (g *Group) populateCache(key string, value ByteView, cache *cache) {
+	logger.Infof("enter into %v.popyulateCache method", g.name)
+	defer logger.Infof("leave from %v.populateCache method", g.name)
 	if g.cacheBytes <= 0 {
 		return
 	}

@@ -46,7 +46,9 @@ func NewHTTPPool(self string) *HTTPPool {
 	return p
 }
 
-var httpPoolMade bool
+var (
+	httpPoolMade bool
+)
 
 func NewHTTPPoolOpts(self string, o *HTTPPoolOptions) *HTTPPool {
 	if httpPoolMade {
@@ -103,6 +105,7 @@ func (p *HTTPPool) PickPeer(key string) (ProtoGetter, bool) {
 
 func (p *HTTPPool) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//	display.Display("HTTPPool", p)
+	logger.Info(r.URL)
 	//解析URL
 	if !strings.HasPrefix(r.URL.Path, p.opts.BasePath) {
 		panic("HTTPPool serving unexpected path: " + r.URL.Path)
@@ -156,6 +159,8 @@ var bufferPool = sync.Pool{
 
 func (h *httpGetter) Get(context Context, in *groupcachepb.GetRequest, out *groupcachepb.GetResponse) error {
 	//	display.Display("httpGetter", h)
+	logger.Infof("enter into %v.Get  http method", h.baseURL)
+	defer logger.Infof("leave from %v.Get http method", h.baseURL)
 	u := fmt.Sprintf(
 		"%v%v/%v",
 		h.baseURL,
