@@ -2,10 +2,12 @@ package mylog
 
 import (
 	"bytes"
+	"demo/display"
 	"fmt"
 	"runtime/debug"
 	"strings"
 	"testing"
+	"time"
 )
 
 var count = 0
@@ -35,8 +37,8 @@ func TestLogManager(t *testing.T) {
 			t.Errorf("Fatal Error: %s\n", err)
 		}
 	}()
-	loggers := &LogManager{loggers: []Logger{&ConsoleLogger{position:2}}}
-//	NewLogger(loggers)
+	loggers := &LogManager{loggers: []Logger{&ConsoleLogger{position: 2}}}
+	//	NewLogger(loggers)
 	for _, logger := range loggers.loggers {
 		testLogger(t, logger)
 	}
@@ -45,7 +47,7 @@ func TestLogManager(t *testing.T) {
 func testLogger(t *testing.T, logger Logger) {
 	var format string
 	var content string
-	var logContent	string
+	var logContent string
 
 	format = ""
 	logContent = "<Error>"
@@ -128,7 +130,7 @@ func checkContent(t *testing.T, logTag LogTag, content string, format string, lo
 	prefixBuffer.WriteString(logTag.Prefix())
 	prefixBuffer.WriteString(" demo/mylog.testLogger : (logger_test.go:")
 	prefix := prefixBuffer.String()
-//	fmt.Printf("prefix : %s\n", prefix)
+	//	fmt.Printf("prefix : %s\n", prefix)
 	var suffixBuffer bytes.Buffer
 	suffixBuffer.WriteString(") - ")
 	if len(format) == 0 {
@@ -137,12 +139,32 @@ func checkContent(t *testing.T, logTag LogTag, content string, format string, lo
 		suffixBuffer.WriteString(fmt.Sprintf(format, logContents...))
 	}
 	suffix := suffixBuffer.String()
-//	fmt.Printf("suffix : %s\n", suffix)
-//	fmt.Printf("content : %s\n", content)
+	//	fmt.Printf("suffix : %s\n", suffix)
+	//	fmt.Printf("content : %s\n", content)
 	if !strings.HasPrefix(content, prefix) {
 		t.Errorf("The content %q should has prefix %q!", content, prefix)
 	}
 	if !strings.HasSuffix(content, suffix) {
 		t.Errorf("The content %q should has suffix %q!", content, suffix)
 	}
+}
+
+func TestFileName(t *testing.T) {
+	fmt.Println(time.Now())
+	fmt.Println(time.Now().Year())
+	fmt.Println(time.Now().Month())
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+	display.Display("Time", time.Now().Format("2006-01-02 15:04:05"))
+	fmt.Println(strings.Split(time.Now().Format("2006-01-02 15:04:05"), " ")[0])
+}
+
+func TestFileError(t *testing.T) {
+	var fl FileLogger
+	fl.Error("xxx")
+	fl.Error("sssssssssssssss")
+	fl.Errorf("%s %d", "error format", 7)
+}
+func TestLogType(t *testing.T) {
+	content := "------------------------"
+	writeContent("error", &content)
 }

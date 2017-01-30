@@ -6,9 +6,8 @@ import (
 
 type ConsoleLogger struct {
 	position Position
-//	invokingNumber uint
+	//	invokingNumber uint
 }
-
 
 func (logger *ConsoleLogger) GetPosition() Position {
 	return logger.position
@@ -109,7 +108,7 @@ func (logger *ConsoleLogger) Panicln(v ...interface{}) string {
 }
 
 func (logger *ConsoleLogger) SetDefaultInvokingNumber() {
-//	logger.invokingNumber = 1
+	//	logger.invokingNumber = 1
 	logger.position = 1
 }
 
@@ -120,4 +119,3 @@ func (logger *ConsoleLogger) SetInvokingNumber(invoking Position) {
 func (logger *ConsoleLogger) GetInvokingNumber() Position {
 	return logger.position
 }
-
