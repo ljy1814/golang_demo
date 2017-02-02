@@ -119,3 +119,10 @@ func (logger *ConsoleLogger) SetInvokingNumber(invoking Position) {
 func (logger *ConsoleLogger) GetInvokingNumber() Position {
 	return logger.position
 }
+
+//TODO 写一个带color的控制台日志工具
+//red \x1b[%dm%s\x1b[0m]]
+//green \x1b[%dm%s\x1b[0m]]
+//yellow \x1b[%dm%s\x1b[0m]]
+//blue \x1b[%dm%s\x1b[0m]]
+//mageenta \x1b[%dm%s\x1b[0m]] 洋红
