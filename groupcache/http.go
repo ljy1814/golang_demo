@@ -70,13 +70,15 @@ func NewHTTPPoolOpts(self string, o *HTTPPoolOptions) *HTTPPool {
 	if p.opts.Replicas == 0 {
 		p.opts.Replicas = defaultReplicas
 	}
+	//hash map 存储其它peer
 	p.peers = consistenthash.New(p.opts.Replicas, p.opts.HashFn)
+	//此处注册peer查找函数,直接返回当前的HTTPPool
 	RegisterPeerPicker(func() PeerPicker { return p })
 	//	display.Display("NEW_HTTPPool", p)
 	return p
 }
 
-//更新pool的基础url列表
+//更新pool的基础url列表,重新设置peers
 func (p *HTTPPool) Set(peers ...string) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
@@ -98,6 +100,7 @@ func (p *HTTPPool) PickPeer(key string) (ProtoGetter, bool) {
 	}
 	//不是自身
 	if peer := p.peers.Get(key); peer != p.self {
+		logger.Infof("----peer : %s , httpGetter.baseURL : %s\n", peer, p.httpGetters[peer].baseURL)
 		return p.httpGetters[peer], true
 	}
 	return nil, false

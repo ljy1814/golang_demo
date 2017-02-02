@@ -1,0 +1,321 @@
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:01:00 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*httpGetter).Get : (http.go:164) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:110) - /_groupcache/SlowDBCache/aaa
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).lookupCache : (groupcache.go:275) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).Get : (groupcache.go:165) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*httpGetter).Get : (http.go:230) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:02:40 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*httpGetter).Get : (http.go:164) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:110) - /_groupcache/SlowDBCache/bbb
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*httpGetter).Get : (http.go:230) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:02:59 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*httpGetter).Get : (http.go:164) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:110) - /_groupcache/SlowDBCache/bbb
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:275) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).Get : (groupcache.go:165) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*httpGetter).Get : (http.go:230) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:07:10 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*httpGetter).Get : (http.go:164) - enter into http://localhost:18002/_groupcache/.Get  http method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:110) - /_groupcache/SlowDBCache/ccc
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*httpGetter).Get : (http.go:230) - leave from http://localhost:18002/_groupcache/.Get http method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:08:05 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*httpGetter).Get : (http.go:164) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:110) - /_groupcache/SlowDBCache/bbb
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).lookupCache : (groupcache.go:275) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).Get : (groupcache.go:165) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*httpGetter).Get : (http.go:230) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:08:27 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:25:00 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*httpGetter).Get : (http.go:164) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:110) - /_groupcache/SlowDBCache/ddd
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).lookupCache : (groupcache.go:275) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).Get : (groupcache.go:165) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*httpGetter).Get : (http.go:230) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:25:32 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*httpGetter).Get : (http.go:164) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:110) - /_groupcache/SlowDBCache/eee
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*httpGetter).Get : (http.go:230) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 18:26:01 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*HTTPPool).PickPeer : (http.go:103) - ----peer : http://localhost:18001 , httpGetter.baseURL : http://localhost:18001/_groupcache/
+
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*httpGetter).Get : (http.go:165) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:111) - /_groupcache/SlowDBCache/eee
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*httpGetter).Get : (http.go:231) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:22:19 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*HTTPPool).PickPeer : (http.go:103) - ----peer : http://localhost:18001 , httpGetter.baseURL : http://localhost:18001/_groupcache/
+
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*httpGetter).Get : (http.go:165) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:111) - /_groupcache/SlowDBCache/aaa
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*httpGetter).Get : (http.go:231) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:31:08 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*HTTPPool).PickPeer : (http.go:103) - ----peer : http://localhost:18001 , httpGetter.baseURL : http://localhost:18001/_groupcache/
+
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*httpGetter).Get : (http.go:165) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:111) - /_groupcache/SlowDBCache/bbb
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*httpGetter).Get : (http.go:231) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:31:39 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*HTTPPool).PickPeer : (http.go:103) - ----peer : http://localhost:18001 , httpGetter.baseURL : http://localhost:18001/_groupcache/
+
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*httpGetter).Get : (http.go:165) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:111) - /_groupcache/SlowDBCache/bbb
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).lookupCache : (groupcache.go:275) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).Get : (groupcache.go:165) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*httpGetter).Get : (http.go:231) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:32:12 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:29 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:29 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:29 demo/groupcache.(*Group).lookupCache : (groupcache.go:275) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:29 demo/groupcache.(*Group).Get : (groupcache.go:165) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*HTTPPool).PickPeer : (http.go:103) - ----peer : http://localhost:18001 , httpGetter.baseURL : http://localhost:18001/_groupcache/
+
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*httpGetter).Get : (http.go:165) - enter into http://localhost:18001/_groupcache/.Get  http method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:111) - /_groupcache/SlowDBCache/bbb
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).lookupCache : (groupcache.go:275) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).Get : (groupcache.go:165) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*httpGetter).Get : (http.go:231) - leave from http://localhost:18001/_groupcache/.Get http method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:32:38 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).getLocally : (groupcache.go:236) - enter into SlowDBCache.getLocally method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).getLocally : (groupcache.go:242) - leave from SlowDBCache.getLocally method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).populateCache : (groupcache.go:282) - enter into SlowDBCache.popyulateCache method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).populateCache : (groupcache.go:294) - leave from SlowDBCache.populateCache method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:33:10 demo/groupcache.(*Group).Get : (groupcache.go:176) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).load : (groupcache.go:183) - enter into SlowDBCache.load method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).lookupCache : (groupcache.go:278) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*HTTPPool).PickPeer : (http.go:103) - ----peer : http://localhost:18002 , httpGetter.baseURL : http://localhost:18002/_groupcache/
+
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).getFromPeer : (groupcache.go:246) - enter into SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*httpGetter).Get : (http.go:165) - enter into http://localhost:18002/_groupcache/.Get  http method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*HTTPPool).ServeHTTP : (http.go:111) - /_groupcache/SlowDBCache/ccc
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).Get : (groupcache.go:152) - enter into SlowDBCache.Get method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).lookupCache : (groupcache.go:267) - enter into SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).lookupCache : (groupcache.go:275) - leave from SlowDBCache.lookupCache method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).Get : (groupcache.go:165) - leave from SlowDBCache.Get method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*httpGetter).Get : (http.go:231) - leave from http://localhost:18002/_groupcache/.Get http method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).getFromPeer : (groupcache.go:263) - leave from SlowDBCache.getFromPeer method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).load : (groupcache.go:232) - leave from SlowDBCache.load method
+[INFO] 2017-02-02 20:34:18 demo/groupcache.(*Group).Get : (groupcache.go:178) - leave from SlowDBCache.Get method

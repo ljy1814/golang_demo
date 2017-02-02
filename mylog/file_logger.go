@@ -20,7 +20,7 @@ const (
 var (
 	LstdFlags           = Ldate | Ltime // initial values for the standard logger
 	prefix              = ""
-	skipNumber Position = 0
+	skipNumber Position = 1
 )
 
 func New(out io.Writer, prefix string, flag int) *FileLogger {
@@ -64,91 +64,91 @@ func writeContent(logType string, content *string) {
 	errorFile.WriteString(*content + "\r\n")
 }
 
-func (logger *FileLogger) Error(v ...interface{}) string{
+func (logger *FileLogger) Error(v ...interface{}) string {
 	content := generateLogContent(getErrorLogTag(), skipNumber, "", v...)
 	writeContent("error", &content)
 	return content
 }
 
-func (logger *FileLogger) Errorf(format string, v ...interface{}) string{
+func (logger *FileLogger) Errorf(format string, v ...interface{}) string {
 	content := generateLogContent(getErrorLogTag(), skipNumber, format, v...)
 	writeContent("error", &content)
 	return content
 }
 
-func (logger *FileLogger) Errorln(v ...interface{}) string{
+func (logger *FileLogger) Errorln(v ...interface{}) string {
 	content := generateLogContent(getErrorLogTag(), skipNumber, "", v...)
 	writeContent("error", &content)
 	return content
 }
 
-func (logger *FileLogger) Fatal(v ...interface{}) string{
+func (logger *FileLogger) Fatal(v ...interface{}) string {
 	content := generateLogContent(getFatalLogTag(), skipNumber, "", v...)
 	writeContent("fatal", &content)
 	return content
 }
 
-func (logger *FileLogger) Fatalf(format string, v ...interface{}) string{
+func (logger *FileLogger) Fatalf(format string, v ...interface{}) string {
 	content := generateLogContent(getFatalLogTag(), skipNumber, format, v...)
 	writeContent("fatal", &content)
 	return content
 }
 
-func (logger *FileLogger) Fatalln(v ...interface{}) string{
+func (logger *FileLogger) Fatalln(v ...interface{}) string {
 	content := generateLogContent(getFatalLogTag(), skipNumber, "", v...)
 	writeContent("fatal", &content)
 	return content
 }
 
-func (logger *FileLogger) Info(v ...interface{}) string{
+func (logger *FileLogger) Info(v ...interface{}) string {
 	content := generateLogContent(getInfoLogTag(), skipNumber, "", v...)
 	writeContent("info", &content)
 	return content
 }
 
-func (logger *FileLogger) Infof(format string, v ...interface{}) string{
+func (logger *FileLogger) Infof(format string, v ...interface{}) string {
 	content := generateLogContent(getInfoLogTag(), skipNumber, format, v...)
 	writeContent("info", &content)
 	return content
 }
 
-func (logger *FileLogger) Infoln(v ...interface{}) string{
+func (logger *FileLogger) Infoln(v ...interface{}) string {
 	content := generateLogContent(getInfoLogTag(), skipNumber, "", v...)
 	writeContent("info", &content)
 	return content
 }
 
-func (logger *FileLogger) Warn(v ...interface{}) string{
+func (logger *FileLogger) Warn(v ...interface{}) string {
 	content := generateLogContent(getWarnLogTag(), skipNumber, "", v...)
 	writeContent("warn", &content)
 	return content
 }
 
-func (logger *FileLogger) Warnf(format string, v ...interface{}) string{
+func (logger *FileLogger) Warnf(format string, v ...interface{}) string {
 	content := generateLogContent(getWarnLogTag(), skipNumber, format, v...)
 	writeContent("warn", &content)
 	return content
 }
 
-func (logger *FileLogger) Warnln(v ...interface{}) string{
+func (logger *FileLogger) Warnln(v ...interface{}) string {
 	content := generateLogContent(getPanicLogTag(), skipNumber, "", v...)
 	writeContent("warn", &content)
 	return content
 }
 
-func (logger *FileLogger) Panic(v ...interface{}) string{
+func (logger *FileLogger) Panic(v ...interface{}) string {
 	content := generateLogContent(getPanicLogTag(), skipNumber, "", v...)
 	writeContent("panic", &content)
 	return content
 }
 
-func (logger *FileLogger) Panicf(format string, v ...interface{}) string{
+func (logger *FileLogger) Panicf(format string, v ...interface{}) string {
 	content := generateLogContent(getPanicLogTag(), skipNumber, format, v...)
 	writeContent("panic", &content)
 	return content
 }
 
-func (logger *FileLogger) Panicln(v ...interface{}) string{
+func (logger *FileLogger) Panicln(v ...interface{}) string {
 	content := generateLogContent(getPanicLogTag(), skipNumber, "", v...)
 	writeContent("panic", &content)
 	return content
