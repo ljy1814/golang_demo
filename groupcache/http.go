@@ -160,6 +160,7 @@ var bufferPool = sync.Pool{
 	},
 }
 
+//peer.Get实际调用函数
 func (h *httpGetter) Get(context Context, in *groupcachepb.GetRequest, out *groupcachepb.GetResponse) error {
 	//	display.Display("httpGetter", h)
 	logger.Infof("enter into %v.Get  http method", h.baseURL)
