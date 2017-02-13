@@ -89,6 +89,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		nUrl := newUrl(url)
 		nUrl += "&type=" + getType(r)
 		nUrl += "&sign=" + genSign(url)
+		fmt.Println(nUrl)
 		nReq, err := http.NewRequest("PUT", nUrl, nil)
 		if err != nil {
 			panic(err)
@@ -110,6 +111,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 			fmt.Errorf("reading response body: %v", err)
 		}
 		w.Write(b.Bytes())
+		fmt.Println(b)
 
 /*   server
 		r.ParseMultipartForm(32 << 20)
@@ -179,28 +181,32 @@ func newUrl(url *url.URL) string {
 		host = strings.Join(hosts, ":")
 	}
 	nUrl += host + url.Path
-	if url.RawQuery != "" {
-		nUrl +=  "?" + url.RawQuery
-	}
+	nUrl +=  "?" + url.RawQuery
 	return nUrl
 }
 
 func genSign(url *url.URL) string {
 	querys := url.RawQuery
-	queryList := strings.Split(querys, "&")
-	queryMap := make(map[string]string, len(queryList))
-	for _, v := range queryList {
-		kv := strings.Split(v, "=")
-		queryMap[kv[0]] = kv[1]
-	}
-	queryKeys := make([]string, len(queryList))
-	for k, _ := range queryMap {
-		queryKeys = append(queryKeys, k)
-	}
-	sort.Strings(queryKeys)
 	newQeury := url.Path + "?"
-	for _, k := range queryKeys {
-		newQeury += k + "=" + queryMap[k]
+	if querys != "" {
+		queryList := strings.Split(querys, "&")
+		queryMap := make(map[string]string, len(queryList))
+		for _, v := range queryList {
+			if v  != "" {
+				kv := strings.Split(v, "=")
+				queryMap[kv[0]] = kv[1]
+			}
+
+		}
+		queryKeys := make([]string, len(queryList))
+		for k, _ := range queryMap {
+			queryKeys = append(queryKeys, k)
+		}
+		sort.Strings(queryKeys)
+
+		for _, k := range queryKeys {
+			newQeury += k + "=" + queryMap[k]
+		}
 	}
 	m5 := md5.New()
 	m5s := m5.Sum([]byte(newQeury))
