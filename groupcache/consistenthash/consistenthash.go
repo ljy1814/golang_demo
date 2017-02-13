@@ -2,9 +2,12 @@
 package consistenthash
 
 import (
+	"demo/display"
 	"hash/crc32"
+	"os"
 	"sort"
 	"strconv"
+	"time"
 )
 
 type Hash func(data []byte) uint32
@@ -43,6 +46,16 @@ func (m *Map) Add(keys ...string) {
 		}
 	}
 	sort.Ints(m.keys)
+	GDisplay("m", m)
+}
+
+func GDisplay(name string, value interface{}) {
+	fdisplay, err := os.OpenFile("display-"+time.Now().Format("2006-01-02")+".log", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
+	if err != nil {
+		panic("open display filoe failed")
+	}
+	defer fdisplay.Close()
+	display.Fdisplay(fdisplay, name, value)
 }
 
 //获取hash值与之最接近的key
