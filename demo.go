@@ -11,21 +11,21 @@ The Curl Demo:
 package main
 
 import (
+	"bytes"
+	"crypto/md5"
+	"encoding/json"
 	"fmt"
 	"html/template"
+	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
-	"bytes"
-	"io"
-	"time"
-	"crypto/md5"
-	"strconv"
 	"net/url"
-	"sync"
 	"sort"
-	"io/ioutil"
-	"encoding/json"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
 )
 
 func sayHelloName(w http.ResponseWriter, r *http.Request) {
@@ -87,7 +87,11 @@ func upload(w http.ResponseWriter, r *http.Request) {
 
 		url := r.URL
 		nUrl := newUrl(url)
-		nUrl += "&type=" + getType(r)
+		if strings.Index(nUrl, "?") != len(nUrl)-1 {
+			nUrl += "&type=" + getType(r)
+		} else {
+			nUrl += "type=" + getType(r)
+		}
 		nUrl += "&sign=" + genSign(url)
 		fmt.Println(nUrl)
 		nReq, err := http.NewRequest("PUT", nUrl, nil)
@@ -113,7 +117,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		w.Write(b.Bytes())
 		fmt.Println(b)
 
-/*   server
+		/*   server
 		r.ParseMultipartForm(32 << 20)
 		file, handler, err := r.FormFile("uploadfile")
 		if err != nil {
@@ -129,7 +133,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		}
 		defer f.Close()
 		io.Copy(f, file)
-*/
+		*/
 	}
 }
 
@@ -138,6 +142,7 @@ var bufferPool = sync.Pool{
 		return new(bytes.Buffer)
 	},
 }
+
 /*
 0 FORM
 1 JSON
@@ -146,7 +151,7 @@ var bufferPool = sync.Pool{
 func getType(r *http.Request) string {
 	r.ParseForm()
 	r.ParseMultipartForm(32 << 20)
-	result, _:= ioutil.ReadAll(r.Body)
+	result, _ := ioutil.ReadAll(r.Body)
 	r.Body.Close()
 	//未知类型的推荐处理方法
 	var f interface{}
@@ -181,7 +186,7 @@ func newUrl(url *url.URL) string {
 		host = strings.Join(hosts, ":")
 	}
 	nUrl += host + url.Path
-	nUrl +=  "?" + url.RawQuery
+	nUrl += "?" + url.RawQuery
 	return nUrl
 }
 
@@ -192,7 +197,7 @@ func genSign(url *url.URL) string {
 		queryList := strings.Split(querys, "&")
 		queryMap := make(map[string]string, len(queryList))
 		for _, v := range queryList {
-			if v  != "" {
+			if v != "" {
 				kv := strings.Split(v, "=")
 				queryMap[kv[0]] = kv[1]
 			}
@@ -209,9 +214,10 @@ func genSign(url *url.URL) string {
 		}
 	}
 	m5 := md5.New()
-	m5s := m5.Sum([]byte(newQeury))
-	return string(m5s)
+	token := fmt.Sprintf("%x", m5.Sum([]byte(newQeury)))
+	return token
 }
+
 /*
 type URL struct {
 	Scheme     string

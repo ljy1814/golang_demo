@@ -46,7 +46,10 @@ func main() {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("method : ", r.Method) //获取请求方法
+	fmt.Println("method : ", r.Method)  //获取请求方法
+	fmt.Println("path", r.URL.Path)     //
+	fmt.Println("schema", r.URL.Scheme) //
+	fmt.Println(r.Form["url_long"])
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("login.gtpl")
 		t.Execute(w, nil)
@@ -60,8 +63,22 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 // 处理/upload 逻辑
 func upload(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("method:", r.Method) //获取请求的方法
+	fmt.Println("method:", r.Method)        //获取请求的方法
+	fmt.Println("path", r.URL.Path)         //
+	fmt.Println("schema", r.URL.Scheme)     //
+	fmt.Println("Path", r.URL.Path)         //
+	fmt.Println("RawQuery", r.URL.RawQuery) //
+	fmt.Println(r.Form["url_long"])
+	r.ParseForm()
 	if r.Method == "POST" {
 		w.Write([]byte("hello, uploadfile"))
+	} else if r.Method == "PUT" { //代理发送的请求居然是put方法
+		if r.Form["type"][0] == "file" {
+			w.Write([]byte("Hello,upload, here is the PUT method and the content type is FILE."))
+		} else if r.Form["type"][0] == "json" {
+			w.Write([]byte("Hello,upload, here is the PUT method and the content type is JSON."))
+		} else if r.Form["type"][0] == "post" {
+			w.Write([]byte("Hello,upload, here is the PUT method and the content type is POST."))
+		}
 	}
 }
