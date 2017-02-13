@@ -22,9 +22,10 @@ import (
 	"crypto/md5"
 	"strconv"
 	"net/url"
-	"github.com/golang/protobuf/proto"
 	"sync"
 	"sort"
+	"io/ioutil"
+	"encoding/json"
 )
 
 func sayHelloName(w http.ResponseWriter, r *http.Request) {
@@ -83,29 +84,11 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		t, _ := template.ParseFiles("upload.gtpl")
 		t.Execute(w, token)
 	} else if r.Method == "POST" {
-		fmt.Println("---------\t"  + newUrl(r.URL))
-/*
-		r.ParseMultipartForm(32 << 20)
-		file, handler, err := r.FormFile("uploadfile")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer file.Close()
-		fmt.Fprintf(w, "%v", handler.Header)
-		f, err := os.OpenFile("./test/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)  // 此处假设当前目录下已存在test目录
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer f.Close()
-		io.Copy(f, file)
-*/
-	} else if r.Method == "PUT" {
+
 		url := r.URL
-		nUrl := url.Scheme
-		host := r.Host
-		host += ""
+		nUrl := newUrl(url)
+		nUrl += "&type=" + getType(r)
+		nUrl += "&sign=" + genSign(url)
 		nReq, err := http.NewRequest("PUT", nUrl, nil)
 		if err != nil {
 			panic(err)
@@ -127,8 +110,24 @@ func upload(w http.ResponseWriter, r *http.Request) {
 			fmt.Errorf("reading response body: %v", err)
 		}
 		w.Write(b.Bytes())
-	} else if r.Method == "DELETE" {
 
+/*   server
+		r.ParseMultipartForm(32 << 20)
+		file, handler, err := r.FormFile("uploadfile")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer file.Close()
+		fmt.Fprintf(w, "%v", handler.Header)
+		f, err := os.OpenFile("./test/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)  // 此处假设当前目录下已存在test目录
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer f.Close()
+		io.Copy(f, file)
+*/
 	}
 }
 
@@ -136,6 +135,26 @@ var bufferPool = sync.Pool{
 	New: func() interface{} {
 		return new(bytes.Buffer)
 	},
+}
+/*
+0 FORM
+1 JSON
+2 FILE
+*/
+func getType(r *http.Request) string {
+	r.ParseForm()
+	r.ParseMultipartForm(32 << 20)
+	result, _:= ioutil.ReadAll(r.Body)
+	r.Body.Close()
+	//未知类型的推荐处理方法
+	var f interface{}
+	if json.Unmarshal(result, &f) == nil {
+		return "json"
+	}
+	if r.MultipartForm != nil {
+		return "file"
+	}
+	return "form"
 }
 
 func newUrl(url *url.URL) string {
@@ -166,7 +185,7 @@ func newUrl(url *url.URL) string {
 	return nUrl
 }
 
-func genSign(url url.URL) string {
+func genSign(url *url.URL) string {
 	querys := url.RawQuery
 	queryList := strings.Split(querys, "&")
 	queryMap := make(map[string]string, len(queryList))
