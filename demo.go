@@ -26,6 +26,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"reflect"
 )
 
 func sayHelloName(w http.ResponseWriter, r *http.Request) {
@@ -57,14 +58,42 @@ func main() {
 
 func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("method : ", r.Method) //获取请求方法
+//	Display("req", r)
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("login.gtpl")
 		t.Execute(w, nil)
 	} else if r.Method == "POST" {
-		r.ParseForm() //解析参数,默认不会解析
+//		r.ParseForm() //解析参数,默认不会解析
 		fmt.Println("username : ", r.Form["username"])
 		fmt.Println("password : ", r.Form["password"])
 		fmt.Println(r.Form)
+		fmt.Println(r.Body)
+        nUrl := handleUrl(r)
+        fmt.Printf("xxxx nUrl : %s\n", nUrl)
+		r.ParseForm()
+		fmt.Println(r.Form)
+		nReq, err := http.NewRequest("POST", nUrl, nil)
+		if err != nil {
+			panic(err)
+		}
+		tr := http.DefaultTransport
+		res, err := tr.RoundTrip(nReq)
+		if err != nil {
+			panic(err)
+		}
+		defer res.Body.Close()
+		if res.StatusCode != http.StatusOK {
+			fmt.Errorf("server returned: %v", res.Status)
+		}
+		b := bufferPool.Get().(*bytes.Buffer)
+		b.Reset()
+		defer bufferPool.Put(b)
+		_, err = io.Copy(b, res.Body)
+		if err != nil {
+			fmt.Errorf("reading response body: %v", err)
+		}
+		w.Write(b.Bytes())
+        fmt.Println(b)
 	} else if r.Method == "PUT" {
 
 	} else if r.Method == "DELETE" {
@@ -137,6 +166,19 @@ func upload(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleUrl(r *http.Request) string {
+    url := r.URL
+    nUrl := newUrl(url)
+    if strings.Index(nUrl, "?") != len(nUrl)-1 {
+        nUrl += "&type=" + getType(r)
+    } else {
+        nUrl += "type=" + getType(r)
+    }
+	nUrl += "&sign=" + genSign(url)
+    fmt.Printf("nUrl : %s\n", nUrl)
+    return nUrl
+}
+
 var bufferPool = sync.Pool{
 	New: func() interface{} {
 		return new(bytes.Buffer)
@@ -152,14 +194,21 @@ func getType(r *http.Request) string {
 	r.ParseForm()
 	r.ParseMultipartForm(32 << 20)
 	result, _ := ioutil.ReadAll(r.Body)
-	r.Body.Close()
-	//未知类型的推荐处理方法
-	var f interface{}
-	if json.Unmarshal(result, &f) == nil {
-		return "json"
-	}
+	defer r.Body.Close()
+	fmt.Println("result : " + string(result))
 	if r.MultipartForm != nil {
 		return "file"
+	}
+	//未知类型的推荐处理方法
+	var f interface{}
+//	err := json.NewDecoder(r.Body).Decode(&f) 
+	for k, _ := range r.Form {
+		err := json.Unmarshal([]byte(k), &f)
+		fmt.Println(err)
+		if err == nil {
+			return "json"
+		}
+		break
 	}
 	return "form"
 }
@@ -258,3 +307,62 @@ type URL struct {
 
 
 */
+
+func display(path string, v reflect.Value) {
+	switch v.Kind() {
+	case reflect.Invalid:
+		fmt.Printf("%s = invalid\n", path)
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < v.Len(); i++ {
+			display(fmt.Sprintf("%s[%d]", path, i), v.Index(i))
+		}
+	case reflect.Struct:
+		for i := 0; i < v.NumField(); i++ {
+			fieldPath := fmt.Sprintf("%s.%s", path, v.Type().Field(i).Name)
+			display(fieldPath, v.Field(i))
+		}
+	case reflect.Map:
+		for _, key := range v.MapKeys() {
+			display(fmt.Sprintf("%s[%s]", path, formatAtom(key)), v.MapIndex(key))
+		}
+	case reflect.Ptr:
+		if v.IsNil() {
+			fmt.Printf("%s = nil\n", path)
+		} else {
+			display(fmt.Sprintf("(*%s)", path), v.Elem())
+		}
+	case reflect.Interface:
+		if v.IsNil() {
+			fmt.Printf("%s = nil\n", path)
+		} else {
+			fmt.Printf("%s.type = %s\n", path, v.Elem().Type())
+			display(path+".value", v.Elem())
+		}
+	default:
+		fmt.Printf("%s = %s\n", path, formatAtom(v))
+	}
+}
+
+func Display(name string, x interface{}) {
+	fmt.Printf("Display %s (%T):\n", name, x)
+	display(name, reflect.ValueOf(x))
+}
+
+func formatAtom(v reflect.Value) string {
+	switch v.Kind() {
+	case reflect.Invalid:
+		return "invalid"
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return strconv.FormatInt(v.Int(), 10)
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return strconv.FormatUint(v.Uint(), 10)
+	case reflect.Bool:
+		return strconv.FormatBool(v.Bool())
+	case reflect.String:
+		return strconv.Quote(v.String())
+	case reflect.Chan, reflect.Func, reflect.Ptr, reflect.Slice, reflect.Map:
+		return v.Type().String() + "0x" + strconv.FormatUint(uint64(v.Pointer()), 16)
+	default:
+		return v.Type().String() + " value"
+	}
+}

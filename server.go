@@ -48,17 +48,40 @@ func main() {
 func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("method : ", r.Method)  //获取请求方法
 	fmt.Println("path", r.URL.Path)     //
+	fmt.Println("host", r.URL.Host)     //
 	fmt.Println("schema", r.URL.Scheme) //
-	fmt.Println(r.Form["url_long"])
+	fmt.Println("RawQuery", r.URL.RawQuery) //
+	r.ParseForm() //解析参数,默认不会解析
+	fmt.Println(r.Form)
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("login.gtpl")
 		t.Execute(w, nil)
 	} else if r.Method == "POST" {
-		r.ParseForm() //解析参数,默认不会解析
-		fmt.Println("username : ", r.Form["username"])
-		fmt.Println("password : ", r.Form["password"])
-		fmt.Println(r.Form)
-	}
+	fmt.Println(r.Form["type"][0])
+        if r.Form["type"][0] == "file" {
+            w.Write([]byte("Hello,login, here is the POST method and the content type is FILE."))
+        } else if r.Form["type"][0] == "json" {
+            w.Write([]byte("Hello,login, here is the POST method and the content type is JSON."))
+        } else if r.Form["type"][0] == "form" {
+            w.Write([]byte("Hello,login, here is the POST method and the content type is FORM."))
+        }
+    } else if r.Method == "PUT" { //代理发送的请求居然是put方法
+        if r.Form["type"][0] == "file" {
+            w.Write([]byte("Hello,login, here is the PUT method and the content type is FILE."))
+        } else if r.Form["type"][0] == "json" {
+            w.Write([]byte("Hello,login, here is the PUT method and the content type is JSON."))
+        } else if r.Form["type"][0] == "form" {
+            w.Write([]byte("Hello,login, here is the PUT method and the content type is FORM."))
+        }
+    } else if r.Method == "DELETE" {
+        if r.Form["type"][0] == "file" {
+            w.Write([]byte("Hello,login, here is the DELETE method and the content type is FILE."))
+        } else if r.Form["type"][0] == "json" {
+            w.Write([]byte("Hello,login, here is the DELETE method and the content type is JSON."))
+        } else if r.Form["type"][0] == "form" {
+            w.Write([]byte("Hello,login, here is the DELETE method and the content type is FORM."))
+        }
+    }
 }
 
 // 处理/upload 逻辑
@@ -71,14 +94,29 @@ func upload(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Form["url_long"])
 	r.ParseForm()
 	if r.Method == "POST" {
-		w.Write([]byte("hello, uploadfile"))
+		if r.Form["type"][0] == "file" {
+			w.Write([]byte("Hello,upload, here is the POST method and the content type is FILE."))
+		} else if r.Form["type"][0] == "json" {
+			w.Write([]byte("Hello,upload, here is the POST method and the content type is JSON."))
+		} else if r.Form["type"][0] == "form" {
+			w.Write([]byte("Hello,upload, here is the POST method and the content type is POST."))
+		}
 	} else if r.Method == "PUT" { //代理发送的请求居然是put方法
 		if r.Form["type"][0] == "file" {
 			w.Write([]byte("Hello,upload, here is the PUT method and the content type is FILE."))
 		} else if r.Form["type"][0] == "json" {
 			w.Write([]byte("Hello,upload, here is the PUT method and the content type is JSON."))
-		} else if r.Form["type"][0] == "post" {
+		} else if r.Form["type"][0] == "form" {
 			w.Write([]byte("Hello,upload, here is the PUT method and the content type is POST."))
 		}
-	}
+	} else if r.Method == "DELETE" {
+		if r.Form["type"][0] == "file" {
+			w.Write([]byte("Hello,upload, here is the DELETE method and the content type is FILE."))
+		} else if r.Form["type"][0] == "json" {
+			w.Write([]byte("Hello,upload, here is the DELETE method and the content type is JSON."))
+		} else if r.Form["type"][0] == "form" {
+			w.Write([]byte("Hello,upload, here is the DELETE method and the content type is POST."))
+		}
+    }
+        
 }
