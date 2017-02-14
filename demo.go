@@ -7,6 +7,16 @@ The Curl Demo:
         curl -i -X PUT -d '{"Name":"Antoine Imbert"}' http://127.0.0.1:8080/users/0
         curl -i -X DELETE http://127.0.0.1:8080/users/0
         curl -i http://127.0.0.1:8080/users
+
+URL ----   http://www.example.com/user/info/123/update?type=1&number=111
+URL ----   http://www.example.com/user/search?type=1&nums=123&title=haha&age=34&time=1434524242
+URL ----   http://www.example.com/user/search?type=1&nums=123&title=haha&age=34&time=1434524242&channel=asadda&sign=12343131
+method=GET PUT POST DELETE
+contentType=JSON,FILE,FORM
+content='{"AAA":"BBB"}'
+
+name=xxx
+age=123
 */
 package main
 
@@ -21,12 +31,12 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
-	"reflect"
 )
 
 func sayHelloName(w http.ResponseWriter, r *http.Request) {
@@ -58,24 +68,33 @@ func main() {
 
 func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("method : ", r.Method) //获取请求方法
-//	Display("req", r)
+	//	Display("req", r)
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("login.gtpl")
 		t.Execute(w, nil)
 	} else if r.Method == "POST" {
-//		r.ParseForm() //解析参数,默认不会解析
+		//		r.ParseForm() //解析参数,默认不会解析
 		fmt.Println("username : ", r.Form["username"])
 		fmt.Println("password : ", r.Form["password"])
 		fmt.Println(r.Form)
 		fmt.Println(r.Body)
-        nUrl := handleUrl(r)
-        fmt.Printf("xxxx nUrl : %s\n", nUrl)
+		nUrl := handleUrl(r)
+		fmt.Printf("xxxx nUrl : %s\n", nUrl)
 		r.ParseForm()
 		fmt.Println(r.Form)
+		//		nReq, err := http.NewRequest("POST", nUrl, strings.NewReader(r.Form.Encode()))
 		nReq, err := http.NewRequest("POST", nUrl, nil)
 		if err != nil {
 			panic(err)
 		}
+		handleReq(r, nReq)
+		fmt.Println("--------------------")
+		fmt.Println(nReq.Form)
+		fmt.Println(nReq.PostForm)
+		fmt.Println(nReq.Body)
+		fmt.Println("--------------------")
+		//		client := &http.Client{}
+		//		res, err := client.Do(nReq)
 		tr := http.DefaultTransport
 		res, err := tr.RoundTrip(nReq)
 		if err != nil {
@@ -93,7 +112,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			fmt.Errorf("reading response body: %v", err)
 		}
 		w.Write(b.Bytes())
-        fmt.Println(b)
+		fmt.Println(b)
 	} else if r.Method == "PUT" {
 
 	} else if r.Method == "DELETE" {
@@ -127,6 +146,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
+		handleReq(r, nReq)
 		tr := http.DefaultTransport
 		res, err := tr.RoundTrip(nReq)
 		if err != nil {
@@ -166,17 +186,26 @@ func upload(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleReq(or *http.Request, r *http.Request) {
+	r.Form = or.Form
+	r.MultipartForm = or.MultipartForm
+	r.PostForm = or.PostForm
+	r.Header = or.Header
+	r.Body = or.Body
+	r.Close = or.Close
+}
+
 func handleUrl(r *http.Request) string {
-    url := r.URL
-    nUrl := newUrl(url)
-    if strings.Index(nUrl, "?") != len(nUrl)-1 {
-        nUrl += "&type=" + getType(r)
-    } else {
-        nUrl += "type=" + getType(r)
-    }
+	url := r.URL
+	nUrl := newUrl(url)
+	if strings.Index(nUrl, "?") != len(nUrl)-1 {
+		nUrl += "channel=" + fmt.Sprintf("%x", md5.New().Sum(nil))
+	} else {
+		nUrl += "&channel=" + fmt.Sprintf("%x", md5.New().Sum(nil))
+	}
 	nUrl += "&sign=" + genSign(url)
-    fmt.Printf("nUrl : %s\n", nUrl)
-    return nUrl
+	fmt.Printf("nUrl : %s\n", nUrl)
+	return nUrl
 }
 
 var bufferPool = sync.Pool{
@@ -201,7 +230,7 @@ func getType(r *http.Request) string {
 	}
 	//未知类型的推荐处理方法
 	var f interface{}
-//	err := json.NewDecoder(r.Body).Decode(&f) 
+	//	err := json.NewDecoder(r.Body).Decode(&f)
 	for k, _ := range r.Form {
 		err := json.Unmarshal([]byte(k), &f)
 		fmt.Println(err)
