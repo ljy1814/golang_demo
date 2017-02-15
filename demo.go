@@ -23,17 +23,14 @@ package main
 import (
 	"bytes"
 	"crypto/md5"
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"os"
-	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -69,33 +66,13 @@ func main() {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("method : ", r.Method) //获取请求方法
-	//	Display("req", r)
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("login.gtpl")
 		t.Execute(w, nil)
 	} else if r.Method == "POST" {
 		//		r.ParseForm() //解析参数,默认不会解析
-		fmt.Println("username : ", r.Form["username"])
-		fmt.Println("password : ", r.Form["password"])
-		fmt.Println(r.Form)
-		fmt.Println(r.Body)
 		nUrl := handleUrl(r)
-		fmt.Printf("xxxx nUrl : %s\n", nUrl)
 		r.ParseForm()
-		fmt.Println(r.Form)
-		//		nReq, err := http.NewRequest("POST", nUrl, strings.NewReader(r.Form.Encode()))
-		//		nReq, err := http.NewRequest("POST", nUrl, nil)
-		//		if err != nil {
-		//			panic(err)
-		//		}
-		//		handleReq(r, nReq)
-		//		res, err := http.Post(nUrl, "application/x-www-form-urlencoded", strings.NewReader(r.Form.Encode()))
-		//		nReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		//		client := &http.Client{}
-		//		res, err := client.Do(nReq)
-		//		tr := http.DefaultTransport
-		//		res, err := tr.RoundTrip(nReq)
 		nReq, err := http.NewRequest("POST", nUrl, strings.NewReader(r.Form.Encode()))
 		if err != nil {
 			panic(err)
@@ -119,7 +96,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 			fmt.Errorf("reading response body: %v", err)
 		}
 		w.Write(b.Bytes())
-		fmt.Println(b)
 	} else if r.Method == "PUT" {
 
 	} else if r.Method == "DELETE" {
@@ -135,26 +111,12 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		h := md5.New()
 		io.WriteString(h, strconv.FormatInt(crutime, 10))
 		token := fmt.Sprintf("%x", h.Sum(nil))
-
 		t, _ := template.ParseFiles("upload.gtpl")
 		t.Execute(w, token)
 	} else if r.Method == "POST" {
-
 		nUrl := handleUrl(r)
-		fmt.Println(nUrl)
-		//nReq, err := http.NewRequest("PUT", nUrl, nil)
-		//if err != nil {
-		//	panic(err)
-		//}
-		//		handleReq(r, nReq)
-		//		tr := http.DefaultTransport
-		//		res, err := tr.RoundTrip(nReq)
 		r.ParseMultipartForm(32 << 20)
-		fmt.Println(r.Form)
-		fmt.Println(r.FormFile("uploadfile"))
-		fff, mff, err := r.FormFile("uploadfile")
-		fmt.Println(fff)
-		fmt.Println(mff)
+		_, mff, err := r.FormFile("uploadfile")
 		if err != nil {
 			panic(err)
 		}
@@ -171,42 +133,6 @@ func upload(w http.ResponseWriter, r *http.Request) {
 			fmt.Errorf("reading response body: %v", err)
 		}
 		w.Write(b.Bytes())
-		/*		res, err := http.Post(nUrl, "application/x-www-form-urlencoded", strings.NewReader(r.Form.Encode()))
-				if err != nil {
-					panic(err)
-				}
-				defer res.Body.Close()
-				if res.StatusCode != http.StatusOK {
-					fmt.Errorf("server returned: %v", res.Status)
-				}
-				b := bufferPool.Get().(*bytes.Buffer)
-				b.Reset()
-				defer bufferPool.Put(b)
-				_, err = io.Copy(b, res.Body)
-				if err != nil {
-					fmt.Errorf("reading response body: %v", err)
-				}
-				w.Write(b.Bytes())
-				fmt.Println(b)
-		*/
-
-		/*   server
-		r.ParseMultipartForm(32 << 20)
-		file, handler, err := r.FormFile("uploadfile")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer file.Close()
-		fmt.Fprintf(w, "%v", handler.Header)
-		f, err := os.OpenFile("./test/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)  // 此处假设当前目录下已存在test目录
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer f.Close()
-		io.Copy(f, file)
-		*/
 	}
 }
 
@@ -247,44 +173,17 @@ func postFile(filename string, targetUrl string) *http.Response {
 		panic(err)
 	}
 	return resp
-
-	/*
-		resp, err := http.Post(targetUrl, contentType, bodyBuf)
-		if err != nil {
-			return err
-		}
-	*/
-
-	//TODO temp
-	defer resp.Body.Close()
-	resp_body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(resp.Status)
-	fmt.Println(string(resp_body))
-	return nil
-}
-
-func handleReq(or *http.Request, r *http.Request) {
-	r.Form = or.Form
-	r.MultipartForm = or.MultipartForm
-	r.PostForm = or.PostForm
-	r.Header = or.Header
-	r.Body = or.Body
-	r.Close = or.Close
 }
 
 func handleUrl(r *http.Request) string {
 	url := r.URL
 	nUrl := newUrl(url)
-	if strings.Index(nUrl, "?") != len(nUrl)-1 {
+	if strings.Index(nUrl, "?") == len(nUrl)-1 {
 		nUrl += "channel=" + fmt.Sprintf("%x", md5.New().Sum(nil))
 	} else {
 		nUrl += "&channel=" + fmt.Sprintf("%x", md5.New().Sum(nil))
 	}
 	nUrl += "&sign=" + genSign(url)
-	fmt.Printf("nUrl : %s\n", nUrl)
 	return nUrl
 }
 
@@ -292,34 +191,6 @@ var bufferPool = sync.Pool{
 	New: func() interface{} {
 		return new(bytes.Buffer)
 	},
-}
-
-/*
-0 FORM
-1 JSON
-2 FILE
-*/
-func getType(r *http.Request) string {
-	r.ParseForm()
-	r.ParseMultipartForm(32 << 20)
-	result, _ := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
-	fmt.Println("result : " + string(result))
-	if r.MultipartForm != nil {
-		return "file"
-	}
-	//未知类型的推荐处理方法
-	var f interface{}
-	//	err := json.NewDecoder(r.Body).Decode(&f)
-	for k, _ := range r.Form {
-		err := json.Unmarshal([]byte(k), &f)
-		fmt.Println(err)
-		if err == nil {
-			return "json"
-		}
-		break
-	}
-	return "form"
 }
 
 func newUrl(url *url.URL) string {
@@ -374,104 +245,4 @@ func genSign(url *url.URL) string {
 	m5 := md5.New()
 	token := fmt.Sprintf("%x", m5.Sum([]byte(newQeury)))
 	return token
-}
-
-/*
-type URL struct {
-	Scheme     string
-	Opaque     string    // encoded opaque data
-	User       *Userinfo // username and password information
-	Host       string    // host or host:port
-	Path       string
-	RawPath    string // encoded path hint (Go 1.5 and later only; see EscapedPath method)
-	ForceQuery bool   // append a query ('?') even if RawQuery is empty
-	RawQuery   string // encoded query values, without '?'
-	Fragment   string // fragment for references, without '#'
-}
-
-(*req).Method = "GET"
-		(*(*req).URL).Scheme = "http"
-		(*(*req).URL).Opaque = ""
-		(*(*req).URL).User = nil
-		(*(*req).URL).Host = "127.0.0.1:43643"
-		(*(*req).URL).Path = "/_groupcache/httpPoolTest/99"
-		(*(*req).URL).RawPath = ""
-		(*(*req).URL).ForceQuery = false
-		(*(*req).URL).RawQuery = ""
-		(*(*req).URL).Fragment = ""
-		(*req).Proto = "HTTP/1.1"
-		(*req).ProtoMajor = 1
-		(*req).ProtoMinor = 1
-		(*req).Body = nil
-		(*req).ContentLength = 0
-		(*req).Close = false
-		(*req).Host = "127.0.0.1:43643"
-		(*req).MultipartForm = nil
-		(*req).RemoteAddr = ""
-		(*req).RequestURI = ""
-		(*req).TLS = nil
-		(*req).Cancel = <-chan struct {}0x0
-		(*req).Response = nil
-		(*req).ctx = nil
-
-
-*/
-
-func display(path string, v reflect.Value) {
-	switch v.Kind() {
-	case reflect.Invalid:
-		fmt.Printf("%s = invalid\n", path)
-	case reflect.Slice, reflect.Array:
-		for i := 0; i < v.Len(); i++ {
-			display(fmt.Sprintf("%s[%d]", path, i), v.Index(i))
-		}
-	case reflect.Struct:
-		for i := 0; i < v.NumField(); i++ {
-			fieldPath := fmt.Sprintf("%s.%s", path, v.Type().Field(i).Name)
-			display(fieldPath, v.Field(i))
-		}
-	case reflect.Map:
-		for _, key := range v.MapKeys() {
-			display(fmt.Sprintf("%s[%s]", path, formatAtom(key)), v.MapIndex(key))
-		}
-	case reflect.Ptr:
-		if v.IsNil() {
-			fmt.Printf("%s = nil\n", path)
-		} else {
-			display(fmt.Sprintf("(*%s)", path), v.Elem())
-		}
-	case reflect.Interface:
-		if v.IsNil() {
-			fmt.Printf("%s = nil\n", path)
-		} else {
-			fmt.Printf("%s.type = %s\n", path, v.Elem().Type())
-			display(path+".value", v.Elem())
-		}
-	default:
-		fmt.Printf("%s = %s\n", path, formatAtom(v))
-	}
-}
-
-func Display(name string, x interface{}) {
-	fmt.Printf("Display %s (%T):\n", name, x)
-	display(name, reflect.ValueOf(x))
-}
-
-func formatAtom(v reflect.Value) string {
-	switch v.Kind() {
-	case reflect.Invalid:
-		return "invalid"
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return strconv.FormatInt(v.Int(), 10)
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		return strconv.FormatUint(v.Uint(), 10)
-	case reflect.Bool:
-		return strconv.FormatBool(v.Bool())
-	case reflect.String:
-		return strconv.Quote(v.String())
-	case reflect.Chan, reflect.Func, reflect.Ptr, reflect.Slice, reflect.Map:
-		return v.Type().String() + "0x" + strconv.FormatUint(uint64(v.Pointer()), 16)
-	default:
-		return v.Type().String() + " value"
-	}
 }

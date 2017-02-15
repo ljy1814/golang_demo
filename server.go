@@ -48,17 +48,7 @@ func main() {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("method : ", r.Method)      //获取请求方法
-	fmt.Println("path", r.URL.Path)         //
-	fmt.Println("host", r.URL.Host)         //
-	fmt.Println("schema", r.URL.Scheme)     //
-	fmt.Println("RawQuery", r.URL.RawQuery) //
-	r.ParseForm()                           //解析参数,默认不会解析
-	fmt.Println("--------------------")
-	fmt.Println(r.Form)
-	fmt.Println(r.PostForm)
-	fmt.Println(r.Body)
-	fmt.Println("--------------------")
+	r.ParseForm() //解析参数,默认不会解析
 	contentType := r.Header.Get("contentType")
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("login.gtpl")
@@ -92,15 +82,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 // 处理/upload 逻辑
 func upload(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("method:", r.Method)        //获取请求的方法
-	fmt.Println("path", r.URL.Path)         //
-	fmt.Println("schema", r.URL.Scheme)     //
-	fmt.Println("Path", r.URL.Path)         //
-	fmt.Println("RawQuery", r.URL.RawQuery) //
-	fmt.Println(r.Form["url_long"])
 	r.ParseForm()
 	r.ParseMultipartForm(32 << 20)
-	fmt.Println(r.FormFile("uploadfile"))
 	contentType := r.Header.Get("contentType")
 	if r.Method == "POST" {
 		if contentType == "file" {
@@ -112,7 +95,6 @@ func upload(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer file.Close()
-			fmt.Fprintf(w, "%v", handler.Header)
 			f, err := os.OpenFile("./test/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666) // 此处假设当前目录下已存在test目录
 			if err != nil {
 				fmt.Println(err)
@@ -142,5 +124,4 @@ func upload(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("Hello,upload, here is the DELETE method and the content type is POST."))
 		}
 	}
-
 }
