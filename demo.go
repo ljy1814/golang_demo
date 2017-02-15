@@ -29,8 +29,10 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
 	"reflect"
 	"sort"
 	"strconv"
@@ -83,20 +85,25 @@ func login(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		fmt.Println(r.Form)
 		//		nReq, err := http.NewRequest("POST", nUrl, strings.NewReader(r.Form.Encode()))
-		nReq, err := http.NewRequest("POST", nUrl, nil)
+		//		nReq, err := http.NewRequest("POST", nUrl, nil)
+		//		if err != nil {
+		//			panic(err)
+		//		}
+		//		handleReq(r, nReq)
+		//		res, err := http.Post(nUrl, "application/x-www-form-urlencoded", strings.NewReader(r.Form.Encode()))
+		//		nReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		//		client := &http.Client{}
+		//		res, err := client.Do(nReq)
+		//		tr := http.DefaultTransport
+		//		res, err := tr.RoundTrip(nReq)
+		nReq, err := http.NewRequest("POST", nUrl, strings.NewReader(r.Form.Encode()))
 		if err != nil {
 			panic(err)
 		}
-		handleReq(r, nReq)
-		fmt.Println("--------------------")
-		fmt.Println(nReq.Form)
-		fmt.Println(nReq.PostForm)
-		fmt.Println(nReq.Body)
-		fmt.Println("--------------------")
-		//		client := &http.Client{}
-		//		res, err := client.Do(nReq)
-		tr := http.DefaultTransport
-		res, err := tr.RoundTrip(nReq)
+		nReq.Header.Set("contentType", r.Form["contentType"][0])
+
+		client := &http.Client{}
+		res, err := client.Do(nReq)
 		if err != nil {
 			panic(err)
 		}
@@ -142,16 +149,23 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		}
 		nUrl += "&sign=" + genSign(url)
 		fmt.Println(nUrl)
-		nReq, err := http.NewRequest("PUT", nUrl, nil)
+		//nReq, err := http.NewRequest("PUT", nUrl, nil)
+		//if err != nil {
+		//	panic(err)
+		//}
+		//		handleReq(r, nReq)
+		//		tr := http.DefaultTransport
+		//		res, err := tr.RoundTrip(nReq)
+		r.ParseMultipartForm(32 << 20)
+		fmt.Println(r.Form)
+		fmt.Println(r.FormFile("uploadfile"))
+		fff, mff, err := r.FormFile("uploadfile")
+		fmt.Println(fff)
+		fmt.Println(mff)
 		if err != nil {
 			panic(err)
 		}
-		handleReq(r, nReq)
-		tr := http.DefaultTransport
-		res, err := tr.RoundTrip(nReq)
-		if err != nil {
-			panic(err)
-		}
+		res := postFile(mff.Filename, nUrl)
 		defer res.Body.Close()
 		if res.StatusCode != http.StatusOK {
 			fmt.Errorf("server returned: %v", res.Status)
@@ -164,7 +178,24 @@ func upload(w http.ResponseWriter, r *http.Request) {
 			fmt.Errorf("reading response body: %v", err)
 		}
 		w.Write(b.Bytes())
-		fmt.Println(b)
+		/*		res, err := http.Post(nUrl, "application/x-www-form-urlencoded", strings.NewReader(r.Form.Encode()))
+				if err != nil {
+					panic(err)
+				}
+				defer res.Body.Close()
+				if res.StatusCode != http.StatusOK {
+					fmt.Errorf("server returned: %v", res.Status)
+				}
+				b := bufferPool.Get().(*bytes.Buffer)
+				b.Reset()
+				defer bufferPool.Put(b)
+				_, err = io.Copy(b, res.Body)
+				if err != nil {
+					fmt.Errorf("reading response body: %v", err)
+				}
+				w.Write(b.Bytes())
+				fmt.Println(b)
+		*/
 
 		/*   server
 		r.ParseMultipartForm(32 << 20)
@@ -184,6 +215,62 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		io.Copy(f, file)
 		*/
 	}
+}
+
+func postFile(filename string, targetUrl string) *http.Response {
+	bodyBuf := &bytes.Buffer{}
+	bodyWriter := multipart.NewWriter(bodyBuf)
+
+	//TODO important
+	fileWriter, err := bodyWriter.CreateFormFile("uploadfile", filename)
+	if err != nil {
+		fmt.Println("error write to file")
+		panic(err)
+	}
+
+	//open file
+	fh, err := os.Open(filename)
+	if err != nil {
+		fmt.Println("error opening file")
+		panic(err)
+	}
+
+	//copy file to proxy server
+	_, err = io.Copy(fileWriter, fh)
+	if err != nil {
+		panic(err)
+	}
+
+	contentType := bodyWriter.FormDataContentType()
+	bodyWriter.Close()
+
+	nReq, err := http.NewRequest("POST", targetUrl, bodyBuf)
+	nReq.Header.Set("Content-Type", contentType)
+	nReq.Header.Set("contentType", "file")
+
+	client := &http.Client{}
+	resp, err := client.Do(nReq)
+	if err != nil {
+		panic(err)
+	}
+	return resp
+
+	/*
+		resp, err := http.Post(targetUrl, contentType, bodyBuf)
+		if err != nil {
+			return err
+		}
+	*/
+
+	//TODO temp
+	defer resp.Body.Close()
+	resp_body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.Status)
+	fmt.Println(string(resp_body))
+	return nil
 }
 
 func handleReq(or *http.Request, r *http.Request) {

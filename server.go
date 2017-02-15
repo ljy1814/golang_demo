@@ -13,8 +13,10 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -57,31 +59,32 @@ func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.PostForm)
 	fmt.Println(r.Body)
 	fmt.Println("--------------------")
+	contentType := r.Header.Get("contentType")
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("login.gtpl")
 		t.Execute(w, nil)
 	} else if r.Method == "POST" {
-		if r.Form["contentType"][0] == "file" {
+		if contentType == "file" {
 			w.Write([]byte("Hello,login, here is the POST method and the content type is FILE."))
-		} else if r.Form["contentType"][0] == "json" {
+		} else if contentType == "json" {
 			w.Write([]byte("Hello,login, here is the POST method and the content type is JSON."))
-		} else if r.Form["contentType"][0] == "form" {
+		} else if contentType == "form" {
 			w.Write([]byte("Hello,login, here is the POST method and the content type is FORM."))
 		}
 	} else if r.Method == "PUT" { //代理发送的请求居然是put方法
-		if r.Form["contentType"][0] == "file" {
+		if contentType == "file" {
 			w.Write([]byte("Hello,login, here is the PUT method and the content type is FILE."))
-		} else if r.Form["contentType"][0] == "json" {
+		} else if contentType == "json" {
 			w.Write([]byte("Hello,login, here is the PUT method and the content type is JSON."))
-		} else if r.Form["contentType"][0] == "form" {
+		} else if contentType == "form" {
 			w.Write([]byte("Hello,login, here is the PUT method and the content type is FORM."))
 		}
 	} else if r.Method == "DELETE" {
-		if r.Form["contentType"][0] == "file" {
+		if contentType == "file" {
 			w.Write([]byte("Hello,login, here is the DELETE method and the content type is FILE."))
-		} else if r.Form["contentType"][0] == "json" {
+		} else if contentType == "json" {
 			w.Write([]byte("Hello,login, here is the DELETE method and the content type is JSON."))
-		} else if r.Form["contentType"][0] == "form" {
+		} else if contentType == "form" {
 			w.Write([]byte("Hello,login, here is the DELETE method and the content type is FORM."))
 		}
 	}
@@ -96,28 +99,46 @@ func upload(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("RawQuery", r.URL.RawQuery) //
 	fmt.Println(r.Form["url_long"])
 	r.ParseForm()
+	r.ParseMultipartForm(32 << 20)
+	fmt.Println(r.FormFile("uploadfile"))
+	contentType := r.Header.Get("contentType")
 	if r.Method == "POST" {
-		if r.Form["contentType"][0] == "file" {
+		if contentType == "file" {
 			w.Write([]byte("Hello,upload, here is the POST method and the content type is FILE."))
-		} else if r.Form["type"][0] == "json" {
+			r.ParseMultipartForm(32 << 20)
+			file, handler, err := r.FormFile("uploadfile")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			defer file.Close()
+			fmt.Fprintf(w, "%v", handler.Header)
+			f, err := os.OpenFile("./test/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666) // 此处假设当前目录下已存在test目录
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			defer f.Close()
+			io.Copy(f, file)
+		} else if contentType == "json" {
 			w.Write([]byte("Hello,upload, here is the POST method and the content type is JSON."))
-		} else if r.Form["type"][0] == "form" {
+		} else if contentType == "form" {
 			w.Write([]byte("Hello,upload, here is the POST method and the content type is POST."))
 		}
 	} else if r.Method == "PUT" { //代理发送的请求居然是put方法
-		if r.Form["contentType"][0] == "file" {
+		if contentType == "file" {
 			w.Write([]byte("Hello,upload, here is the PUT method and the content type is FILE."))
-		} else if r.Form["type"][0] == "json" {
+		} else if contentType == "json" {
 			w.Write([]byte("Hello,upload, here is the PUT method and the content type is JSON."))
-		} else if r.Form["type"][0] == "form" {
+		} else if contentType == "form" {
 			w.Write([]byte("Hello,upload, here is the PUT method and the content type is POST."))
 		}
 	} else if r.Method == "DELETE" {
-		if r.Form["contentType"][0] == "file" {
+		if contentType == "file" {
 			w.Write([]byte("Hello,upload, here is the DELETE method and the content type is FILE."))
-		} else if r.Form["type"][0] == "json" {
+		} else if contentType == "json" {
 			w.Write([]byte("Hello,upload, here is the DELETE method and the content type is JSON."))
-		} else if r.Form["type"][0] == "form" {
+		} else if contentType == "form" {
 			w.Write([]byte("Hello,upload, here is the DELETE method and the content type is POST."))
 		}
 	}
