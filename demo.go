@@ -140,14 +140,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		t.Execute(w, token)
 	} else if r.Method == "POST" {
 
-		url := r.URL
-		nUrl := newUrl(url)
-		if strings.Index(nUrl, "?") != len(nUrl)-1 {
-			nUrl += "&type=" + getType(r)
-		} else {
-			nUrl += "type=" + getType(r)
-		}
-		nUrl += "&sign=" + genSign(url)
+		nUrl := handleUrl(r)
 		fmt.Println(nUrl)
 		//nReq, err := http.NewRequest("PUT", nUrl, nil)
 		//if err != nil {
