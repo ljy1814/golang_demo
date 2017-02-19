@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Unknown/com"
-	"github.com/astaxie/beego/orm"
+	orm "github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
 )
 
