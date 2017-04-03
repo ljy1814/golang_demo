@@ -1,0 +1,11 @@
+manage:
+    username: shadiao
+    password: shadiao
+db:
+    username: root
+    password: root
+    port: 3306
+    host: localhost
+    dbname: visit
+deploy_host: localhost:3000
+run_at: :3000
